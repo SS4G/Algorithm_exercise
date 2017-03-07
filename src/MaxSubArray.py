@@ -79,7 +79,8 @@ class MaxSubArray:
                 right_index += 1
                 max_right_sum = tmp_sum if max_right_sum < tmp_sum else max_right_sum
             max_middle_sum = max_left_sum + max_right_sum
-
+            print(left_list,right_list) #??
+            print(self.maxsubarray2(left_list), self.maxsubarray2(right_list), max_middle_sum) #??
             return max(self.maxsubarray2(left_list), self.maxsubarray2(right_list), max_middle_sum)
 
     @staticmethod
@@ -96,9 +97,9 @@ class MaxSubArray:
 if __name__ == "__main__":
     t = MaxSubArray()
     testcase = [
-        ([-2, 1, -3, 4, -1, 2, 1, -5, 4], 6),
-        ([1, ], 1),
-        ([-2, 1], 1),
+        # ([-2, 1, -3, 4, -1, 2, 1, -5, 4], 6),
+        # ([1, ], 1),
+        # ([-2, 1], 1),
         ([1, 2, -1], 3)
     ]
     for case in testcase:
@@ -107,7 +108,6 @@ if __name__ == "__main__":
     for case in testcase:
         assert t.maxsubarray1(case[0]) == case[1], "result ERROR!  your result is %d require %d " \
                                                  % (t.maxsubarray1(case[0]), case[1])
-
     for case in testcase:
         assert t.maxsubarray2(case[0]) == case[1], "result ERROR!  your result is %d require %d " \
                                                  % (t.maxsubarray2(case[0]), case[1])
