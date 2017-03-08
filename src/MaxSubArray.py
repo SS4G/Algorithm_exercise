@@ -6,7 +6,7 @@ class MaxSubArray:
 
     def maxsubarray0(self, target_list):
         """
-        穷举法
+        穷举法(TLE)
         complexity:O(n^3)
         :param target_list:
         :return: tmp_sum of max sub array
@@ -26,7 +26,7 @@ class MaxSubArray:
 
     def maxsubarray1(self, target_list):
         """
-        累加法
+        累加法(TLE)
         complexity:O(n^3)
         :param target_list:
         :return: tmp_sum of max sub array
@@ -44,7 +44,7 @@ class MaxSubArray:
 
     def maxsubarray2(self, target_list):
         """
-        分治法
+        分治法(beat 5%)
         complexity:O(n*log(n))
         :param target_list:
         :return: tmp_sum of max sub array
@@ -59,8 +59,8 @@ class MaxSubArray:
             return max(target_list[0], target_list[1], sum(target_list))
         else:
             middle_index = length >> 1
-            left_list = target_list[:middle_index]
-            right_list = target_list[middle_index:]
+            left_list = target_list[:middle_index+1]
+            right_list = target_list[middle_index+1:]
 
             # if max sub array contains element[middle_index]
             max_left_sum = -(1 << 32)
@@ -79,28 +79,41 @@ class MaxSubArray:
                 right_index += 1
                 max_right_sum = tmp_sum if max_right_sum < tmp_sum else max_right_sum
             max_middle_sum = max_left_sum + max_right_sum
-            print(left_list,right_list) #??
-            print(self.maxsubarray2(left_list), self.maxsubarray2(right_list), max_middle_sum) #??
+
             return max(self.maxsubarray2(left_list), self.maxsubarray2(right_list), max_middle_sum)
 
-    @staticmethod
-    def maxsubarray3(self):
+    def maxsubarray3(self, target_list):
         """
+        (beat 77%)
         线性移动的方法--
         complexity:O(n)
         :param target_list:
         :return: tmp_sum of max sub array
         """
-        pass
+        this_sum = 0
+        max_sum = -(1 << 32)
+        max_val = max(target_list)
+        if max_val < 0:
+            return max_val
+
+        length = len(target_list)
+        for i in range(length):
+            this_sum += target_list[i]
+            if this_sum <= 0:
+                this_sum = 0
+            if max_sum < this_sum:
+                max_sum = this_sum
+        return max_sum
 
 # Test
 if __name__ == "__main__":
     t = MaxSubArray()
     testcase = [
-        # ([-2, 1, -3, 4, -1, 2, 1, -5, 4], 6),
-        # ([1, ], 1),
-        # ([-2, 1], 1),
-        ([1, 2, -1], 3)
+        ([-2, 1, -3, 4, -1, 2, 1, -5, 4], 6),
+        ([1, ], 1),
+        ([-2, 1], 1),
+        ([1, 2, -1], 3),
+        ([-1, ], -1)
     ]
     for case in testcase:
         assert t.maxsubarray0(case[0]) == case[1], "result ERROR!  your result is %d require %d " \
@@ -111,6 +124,9 @@ if __name__ == "__main__":
     for case in testcase:
         assert t.maxsubarray2(case[0]) == case[1], "result ERROR!  your result is %d require %d " \
                                                  % (t.maxsubarray2(case[0]), case[1])
+    for case in testcase:
+        assert t.maxsubarray3(case[0]) == case[1], "result ERROR!  your result is %d require %d " \
+                                                 % (t.maxsubarray3(case[0]), case[1])
 
     print("test process terminate successfully!")
 
