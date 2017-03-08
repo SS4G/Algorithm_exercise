@@ -1,3 +1,3 @@
-x=[1, 2, 3]
-print(x[2:2])
-print(sum([]))
+x = [1, 2, 3]
+x.insert(1, 99)
+print(x)
