@@ -1,6 +1,7 @@
 # coding=utf-8
 # Author: SS4G
 # Date 2017/03/08
+# all test case passed
 
 
 class Node:
@@ -95,7 +96,7 @@ class LinkList:
             tmp = self.list_handler.next if self.has_head_node else self.list_handler
             i = 0
             while i < index:
-                index += 1
+                i += 1
                 tmp = tmp.next
             return tmp
 
@@ -173,11 +174,12 @@ class LinkList:
                 new_node.next = self.list_handler
                 self.list_handler.pre = new_node
                 self.list_handler = new_node
-            self.size += 1
+
         else:
             pre_node = self.find_node_by_index(index-1)
             self.insert_node(pre_node, node_val=node_value)
-    
+        self.size += 1
+
     def delete(self, index):
         """
         :param index: 要删除的节点的索引 该索引对应的节点会被删除
@@ -201,6 +203,7 @@ class LinkList:
             pre_node.next = current_node.next
             if current_node.next is not None:  # maybe current node is the last node of link list
                 current_node.next.pre = pre_node   # only valid when self.is_double_linklist is true
+        self.size -= 1
 
     def go_previous(self, node):
         assert self.is_double_linklist, "the lisk list is single linklist"
@@ -209,14 +212,14 @@ class LinkList:
     def go_next(self, node):
         return node.next
 
-    def disp_list(self, link_list):
+    def show(self):
         """
         将一个链表重头到尾打印出来
         需要实现node类的__str__()方法 才可以被打印
         :param link_list:
         :return:
         """
-        tmp = link_list
+        tmp = self.list_handler
         disp_list = []
         while True:
             disp_list.append(str(tmp.val))
@@ -228,7 +231,55 @@ class LinkList:
                 break
         print("".join(disp_list))
 
-
+# Test
 if __name__ == "__main__":
-    init_list = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"]
-    l0 = LinkList(init_list,)
+    testcase = [
+        # init_list - head  - double - insert_index - find_index - find_value
+        (["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"], False, False, 3, 6, "9"),
+        (["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"], False, True, 3, 6, "9"),
+        (["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"], True, False, 3, 6, "9"),
+        (["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"], True, True, 3, 6, "9"),
+
+        (["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"], True, True, 0, 6, "9"),
+        (["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"], True, True, 0, 6, "9"),
+        (["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"], True, True, 0, 6, "9"),
+        (["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"], True, True, 0, 6, "9"),
+
+        (["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"], True, True, 10, 6, "9"),
+        (["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"], True, True, 10, 6, "9"),
+        (["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"], True, True, 10, 6, "9"),
+        (["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"], True, True, 10, 6, "9"),
+
+    ]
+    i = 0
+    for case0 in testcase:
+        print("  ")
+        print("  ")
+        print("running testcase ", i)
+        init_list = case0[0]
+        has_head = case0[1]
+        isdouble = case0[2]
+        insert_index = case0[3]
+        find_index = case0[4]
+        find_value = case0[5]
+
+        l0 = LinkList(init_list, has_head, isdouble)
+        l0.show()
+        # l0 = LinkList([1, 2, 3], True, False)
+        res = l0.find_node_by_value(find_value)
+        assert res.val == find_value, "find value failed!"
+
+        res = l0.find_node_by_index(find_index)
+        assert res.val == case0[0][find_index], "l0 find index failed!"
+
+        print("value instered")
+        l0.insert(insert_index, "INSERT_VALUE")
+        l0.show()
+
+        print("value deleted")
+        l0.delete(insert_index)
+        l0.show()
+
+        i += 1
+
+
