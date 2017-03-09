@@ -1,7 +1,7 @@
 # coding=utf-8
 # Author: SS4G
 # Date 2017/03/09
-# all test case passed
+# Status:constructing
 
 
 class SortFunc:
