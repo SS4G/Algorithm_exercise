@@ -1,3 +1,4 @@
-x = [1, 2, 3]
-x.insert(1, 99)
-print(x)
+bucket = [[] for i in range(10)]
+print(pos_bucket)
+for j in pos_bucket:
+    print(id(j))
