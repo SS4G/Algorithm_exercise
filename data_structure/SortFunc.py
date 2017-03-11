@@ -10,11 +10,11 @@ class SortFunc:
     """
     def __init__(self):
         self.MIN_INT = -(1 << 32)
-        self.MAX_INT = ((1 << 32)-1) 
-        
+        self.MAX_INT = ((1 << 32)-1)
+
     def my_sorted(self, a, key=None, reverse=False, sort_type="bubble"):
         pass
-    
+
     def my_min(self, a, begin=None, end=None):
         """
         :param a: 要排序的列表
@@ -33,7 +33,7 @@ class SortFunc:
                 val = a[i]
                 min_index = i
         return (val, min_index)
-    
+
     def my_max(self, a, begin=None, end=None):
         """
         :param a: 要排序的列表
@@ -170,7 +170,7 @@ class SortFunc:
             (val, index) = self.my_min(a, i+1, length)
             a[i], a[index] = a[index], a[i]
         return a
-        
+
     def merge_sorted(self, array):
         """
         归并排序
@@ -189,14 +189,88 @@ class SortFunc:
             sorted_1 = self.merge_sorted(array[length >> 1:])
             return self.merge_sorted_array(sorted_0, sorted_1)
 
-    def heap_sorted(self, a):
+    def heap_sorted(self, array):
         pass
-        
-    def quick_sorted(self, a):
-        pass
-        
-    def shell_sorted(self, a):
-        pass
+
+    def quick_sort_inplace(self, arr, start, end):
+        """
+        原地快速排序
+        :param arr: 要排序的序列
+        :param start: 起始下标 包含这个下标
+        :param end: 结束下标 不包含这个下标
+        :return:
+        """
+        key_index = start
+        small_index = start
+        large_index = end-1
+        compare_small_flag = True
+        if end - start == 2:
+            max_val = max(arr[start:end])
+            min_val = min(arr[start:end])
+            arr[start] = max_val
+            arr[end-1] = min_val
+        elif end - start == 1:
+            pass
+        elif start == end:
+            pass
+        else:
+            while small_index < large_index:  # 将大于key的值全部放在key右边 将小于key的
+                if compare_small_flag:
+                    if arr[small_index] > arr[key_index]:
+                        arr[small_index], arr[key_index] = arr[key_index], arr[small_index]
+                        key_index = small_index
+                        compare_small_flag = False
+                    else:
+                        if small_index >= key_index:
+                            compare_small_flag = False
+                        small_index += 1
+                else:
+                    if arr[large_index] < arr[key_index]:
+                        arr[large_index], arr[key_index] = arr[key_index], arr[large_index]
+                        key_index = large_index
+                        compare_small_flag = True
+                    else:
+                        if large_index <= key_index:
+                            compare_small_flag = True
+                        large_index -= 1
+            self.quick_sort_inplace(arr, 0, key_index)
+            if key_index < end-1:
+                self.quick_sort_inplace(arr, key_index+1, end)
+
+    def quick_sorted(self, array):
+        a = []
+        a[:] = array[:]
+        length = len(array)
+        if length <= 1:
+            return a
+        else:
+            self.quick_sort_inplace(a, 0, length)
+            return a
+
+    def insert_by_step(self, array, step):
+        """
+        以对应的间隔进行插入排序
+        :param array:
+        :param step:
+        :return:
+        """
+        arr_len = len(array)
+        for offset in range(step):
+            i = 0
+            key_index = i*step+offset
+            while key_index < arr_len:
+                key_val = array[key_index]
+                while key_index :
+                if key_val < array[key_index - step]:
+                    array[index] = array[index -step]
+                    index -= step
+
+    def shell_sorted(self, array):
+        a = []
+        a[:] = array[:]
+        length = len(array)
+        gap = length >> 1
+
 
 # Test
 if __name__ == "__main__":
