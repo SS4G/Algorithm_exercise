@@ -189,9 +189,6 @@ class SortFunc:
             sorted_1 = self.merge_sorted(array[length >> 1:])
             return self.merge_sorted_array(sorted_0, sorted_1)
 
-    def heap_sorted(self, array):
-        pass
-
     def quick_sort_inplace(self, arr, start, end):
         """
         原地快速排序
@@ -260,16 +257,37 @@ class SortFunc:
             key_index = i*step+offset
             while key_index < arr_len:
                 key_val = array[key_index]
-                while key_index :
-                if key_val < array[key_index - step]:
-                    array[index] = array[index -step]
-                    index -= step
+                j = key_index - step
+                while j > 0:
+                    if key_val < array[j]:
+                        array[j+step] = array[j]
+                        j -= step
+                array[j+step] = key_val
+                key_index += step
 
     def shell_sorted(self, array):
         a = []
         a[:] = array[:]
         length = len(array)
         gap = length >> 1
+        while gap > 0:
+            self.insert_by_step(a, gap)
+            gap >>= 1  # 希尔排序的 间隔按照 除以二缩小直到间隔变为1 也就是进行最简单的插入排序
+            # 此时的插入排序需要移动的次数已经很少了
+
+    # below is heap sort func
+    def adjust_heap(self, heap, this_index):
+        l_child = this_index*2
+        r_child = this_index*2+1
+        father = this_index >> 1
+        l_child_val = heap[l_child]
+        r_child_val = heap[r_child]
+
+
+    def heap_sorted(self, array):
+        a = []
+        a[:] = array[:]
+        length = len(array)
 
 
 # Test
