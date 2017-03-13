@@ -1,3 +1,7 @@
-x = [1, 2, 3]
-x.insert(1, 99)
-print(x)
+def x():
+    """
+    ss
+    :return:
+    """
+    pass
+print(x.__name__)
