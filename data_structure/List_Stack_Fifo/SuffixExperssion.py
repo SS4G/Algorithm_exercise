@@ -123,6 +123,7 @@ class SuffixExpression:
                 output.append(opcode_stack.pop()[0])
         return "".join(output)
 
+# Test
 
 if __name__ == "__main__":
     s = SuffixExpression()
