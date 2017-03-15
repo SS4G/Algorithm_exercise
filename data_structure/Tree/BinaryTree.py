@@ -8,16 +8,17 @@ class Node:
     """
     二叉树的节点
     """
-    def __init__(self, val=None):
+    def __init__(self, val=None, node_index=-1):
         """
         :param val:
         """
         self.val = val  # 节点值
         self.left = None  # 左孩子的引用
         self.right = None  # 有孩子的引用
-        self.index = None  # 在满二叉树中的绝对位置 根节点为0
+        self.index = node_index  # 在满二叉树中的绝对位置 根节点为0
+
     def __str__(self):
-        return self.val
+        return str(self.val)
 
 
 class BinaryTree:
@@ -29,7 +30,10 @@ class BinaryTree:
     二叉树的根节点编号为0
     根节点所在的层为0
     """
-    def __init__(self, init_val_list=None):
+    def __init__(self):
+        pass
+
+    def create_binary_tree(self, init_val_list=None):
         """
         根据列表中的值创建一个二叉树
         :param init_val_list:
@@ -42,12 +46,14 @@ class BinaryTree:
         # 其左孩子的坐标为 2*n+1 右孩子的坐标为 2*n+2
         length = len(init_val_list)
         if init_val_list is not None:
-            root = Node(val = init_val_list[0])
+            root = Node(val=init_val_list[0])
+            self.add_node(root, 0, length, init_val_list)
+        else:
+            root = None
+        return root
 
-    def add_node(self, this_node=None, this_node_index=0,
-                    init_val_length=0, init_arr=None):
+    def add_node(self, this_node=None, this_node_index=0, init_val_length=0, init_arr=None):
         """
-
         :param this_node: 当前节点的 引用
         :param this_node_index: 当前节点在满二叉树中的位置
         :param init_val_length: 初始化时yo
@@ -57,13 +63,17 @@ class BinaryTree:
         left_son_index = this_node_index*2+1
         right_son_index = this_node_index*2+2
         if left_son_index < init_val_length:
-            this_node.left = Node(init_arr[left_son_index])
-            self.add_node(this_node.left, )
-
-    def construct_tree(self, val_list, max_node_index):
-
-
-
+            val = init_arr[left_son_index]
+            if val is not None:
+                this_node.left = Node(val, 2*this_node_index+1)
+                self.add_node(this_node.left, this_node_index=2*this_node_index+1,
+                              init_val_length=init_val_length, init_arr=init_arr)
+        if right_son_index < init_val_length:
+            val = init_arr[right_son_index]
+            if val is not None:
+                this_node.right = Node(val, 2*this_node_index+2)
+                self.add_node(this_node.right, this_node_index=2*this_node_index+2,
+                              init_val_length=init_val_length, init_arr=init_arr)
 
     def print_tree(self, tree, level=0, level_mark="····"):
         """
@@ -79,7 +89,11 @@ class BinaryTree:
             return None
         else:
             print(" " + level * level_mark + str(tree))
+            if (tree.left is None) and (tree.right is not None):  # 确保在左右子树只有一个的情况下不会分不清左右
+                print(" " + (level+1) * level_mark+"-")
             self.print_tree(tree.left, level=level+1)
+            if (tree.right is None) and (tree.left is not None):
+                print(" " + (level+1) * level_mark+"-")
             self.print_tree(tree.right, level=level + 1)
 
     def recursion_pre_traverse(self):
@@ -147,4 +161,5 @@ if __name__ == "__main__":
 
     binarytree = BinaryTree()
     binarytree.print_tree(a)
-
+    tree = binarytree.create_binary_tree([0, 1, 2, 3, 4, 5, 6, 7, None, None, 10])
+    binarytree.print_tree(tree)
