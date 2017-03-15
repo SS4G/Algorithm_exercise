@@ -1,7 +1,7 @@
 # coding=utf-8
 # Author: SS4G
 # Date 2017/03/09
-# Status:constructing
+# Status:finished
 
 import random
 
