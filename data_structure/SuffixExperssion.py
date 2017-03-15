@@ -56,6 +56,7 @@ class SuffixExpression:
 
     def op_code_cmp(self, op0, op1):
         """
+        比较操作符优先级
         :param op0:
         :param op1:
         :return: positive int if op0 > op1
@@ -64,7 +65,7 @@ class SuffixExpression:
         """
         if (op0[1] > op1[1]) or (op0[1] == op1[1] and op0[2] > op1[2]):
             return 1
-        if (op0[1] == op1[1]) or (op0[2] == op1[2]):
+        if (op0[1] == op1[1]) and (op0[2] == op1[2]):
             return 0
         if (op0[1] < op1[1]) or (op0[1] == op1[1] and op0[2] < op1[2]):
             return -1
@@ -82,7 +83,6 @@ class SuffixExpression:
         opcode_array = []
         oprand_array = []
         output = []
-        outstream = []
         for i in midfix_exp:
             if i == "(":
                 base_rank += 1
@@ -94,23 +94,34 @@ class SuffixExpression:
                 opcode_array.append((i, base_rank, 1))
             else:
                 oprand_array.append(i)
-        oprand_len = len(oprand_array)
+
+        # print(opcode_array) # 查看操作符的优先级
 
         output.append(oprand_array[0])
-        i = 1
-        while len(opcode_stack) > 0:
-            if i < len(opcode_array)-1:  # 仍然有操作符
-                opcode_stack.append(opcode_array[i])
-                output.append(oprand_array[i])
-                cmp_res = self.op_code_cmp(opcode_stack[-1], opcode_array[i+1])  # 将当前的运算符与后面的一个运算符比较优先级
-                if cmp_res >= 0:
-                    output.append(opcode_stack.pop()[0])  # 将优先级大的操作负输出
+        output.append(oprand_array[1])
+        opcode_stack.append(opcode_array[0])
+        i = 1  # 将要压入的操作符的索引 该索引对应的值尚未压入
+
+        while (len(opcode_stack) > 0) or (i <= len(opcode_array)-1):
+            # 操作符所处的位置不是在操作符的列表中就是在操作符的堆栈里
+            # 所以只有这两个地方都没有操作符了才能说明所有的操作符都被输出到了输出流里面
+            if i <= len(opcode_array)-1:  # 仍然有操作符在操作符列表中
+                if len(opcode_stack) > 0:  # 如果当前堆栈中有之前的操作符 就要拿现在的操作符和之前的操作符去比较
+                    # 如果之前的操作符的优先级更高就要保证之前的操作符先输出 然后才能将后面的操作数放入到输出流中
+                    cmp_res = self.op_code_cmp(opcode_stack[-1], opcode_array[i])  # 将当前的运算符与后面的一个运算符比较优先级
+                    if cmp_res >= 0:
+                        output.append(opcode_stack.pop()[0])  # 将优先级大的操作符输出
+                    else:  # 若当前的操作符更大那么将操作数放入输出中 操作符放入堆栈中 因为还不知道下一个操作符的优先级是否更高
+                        opcode_stack.append(opcode_array[i])
+                        output.append(oprand_array[i + 1])
+                        i += 1
                 else:
-                    pass
-            else:  #
-                if i == len(opcode_array)-1:
-                    output.append(oprand_array[i])
-            i += 1
+                    opcode_stack.append(opcode_array[i])
+                    output.append(oprand_array[i+1])
+                    i += 1
+            else:  # 若所有操作符都被检索过了 只在操作符堆栈中还有操作符 那么就说明只可能在堆栈中还有操作符将他们按照次序弹出来就好
+                output.append(opcode_stack.pop()[0])
+        return "".join(output)
 
 
 if __name__ == "__main__":
@@ -122,5 +133,34 @@ if __name__ == "__main__":
     ]
     for testcase in testcases0:
         assert s.calc_suffix(testcase[0]) == testcase[1], "suffix calc error"
-        print(s.calc_suffix(testcase[0]))
+
+    testcases1 = [
+        ("1+2*3+4-7*8-9", "123*+4+78*-9-"),
+        ("1+2*(5*7+9)+2", "1257*9+*+2+"),
+    ]
+
+    for testcase in testcases1:
+        try:
+            assert s.midfix2suffix(testcase[0]) == testcase[1], "midfix to suffix error"
+        except AssertionError:
+            print("ERROR! ")
+            print("return ", s.midfix2suffix(testcase[0]))
+            print("require", testcase[1])
+
+    testcase2 = [
+        ("1+2*3+4+5*6+7+8+9", 65),
+        ("1+2*(3+4)+(5*6)+(7+8+9)", 69),
+        ("1+2*(3*4+5)*6+(7+8*9)", 284),
+        ("(1+2)*3+(4+5)*(6+7)+8+9", 143),
+        ("2+2", 4),
+        ("3*3", 9),
+        ("(((3+3)))", 6),
+    ]
+    for testcase in testcase2:
+        try:
+            assert s.calc_suffix(s.midfix2suffix(testcase[0])) == testcase[1], ""
+        except AssertionError:
+            print("ERROR!")
+            print("require:", testcase[1])
+            print("return :", s.calc_suffix(s.midfix2suffix(testcase[0])))
     print("END successfully!")
