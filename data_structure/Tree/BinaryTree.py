@@ -96,11 +96,14 @@ class BinaryTree:
                 print(" " + (level+1) * level_mark+"-")
             self.print_tree(tree.right, level=level + 1)
 
-    def recursion_pre_traverse(self):
+    def recursion_pre_traverse(self, root):
         """
         递归前序遍历
         :return: 返回一个遍历结果的值的列表
         """
+        traverse_res = []
+        if root.left is not None:
+            self.recursion_pre_traverse(root.left)
 
     def recursion_mid_traverse(self):
         """
