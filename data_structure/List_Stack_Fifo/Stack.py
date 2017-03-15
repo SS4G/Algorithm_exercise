@@ -7,6 +7,7 @@
 class ArrayStack:
     """
     数组实现的栈
+    stack top 指向一个空的空间
     """
     def __init__(self, stack_size=10):
         self.stack_size = stack_size
@@ -48,7 +49,8 @@ class StackNode:
 
 class LinkListStack:
     """
-    链表实现的栈
+    数组实现的栈
+    stack top 指向一个空的空间
     """
     def __init__(self, stack_size=10):
         self.stack_size = stack_size

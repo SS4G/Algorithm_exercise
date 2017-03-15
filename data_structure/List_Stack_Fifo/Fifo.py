@@ -7,6 +7,8 @@
 class Fifo:
     """
     环形fifo
+    rear  指向一个有内容的空间
+    front 指向一个空的空间
     """
     def __init__(self, size0):
         size = size0+1
