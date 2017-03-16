@@ -223,17 +223,61 @@ class BinaryTree:
 
     def level_order_traverse0(self, root, level=0):
         """
+        基于一条原则,对二叉树进行先序遍历 所以对于同一层级的
+        节点左边的节点肯定比右边的节点先被遍历到 所以每次一旦遍历到
+        一个节点就将他填充到对应层级的队列中 最后按照队列的层级
+        将队列从低层级到高层级进行合并
+
         空的二叉树的层次为0
         只有一个节点的二叉树的的level是1
         二叉树层次遍历
-        使用递归的方式实现
+        使用多个列表的方式实现
         :return: 返回一个遍历结果的值的列表的列表
         每个子列表 代表一个层次 根节点所在的层为0
         """
+        if level == 0:
+            self.lv_dict = {}
+            if root is not None:
+                self.level_order_traverse0(root, level=1)
+                levels = list(self.lv_dict.keys())  # the method keys return a Iterator rather than
+                levels.sort()
+                res = []
+                for key in levels:
+                    res.extend(self.lv_dict[key])
+                return res
+        else:
+            if root is not None:
+                if level not in self.lv_dict:
+                    self.lv_dict[level] = []
+                self.lv_dict[level].append(root.val)
+                self.level_order_traverse0(root.left, level=level+1)
+                self.level_order_traverse0(root.right, level=level+1)
 
-
-
-
+    def level_order_traverse1(self, root):
+        """
+        使用一个队列
+        将根节点先放入队列
+        在访问节点时就将其值放到输出中然后将他的左右孩子放入到队列中
+        只要队列中还有没有被访问的节点 就一直进行循环
+        所有节点被访问后 停止循环
+        :param root:
+        :return:
+        """
+        self.res1 = []
+        self.first = False
+        self.fifo = [root, ]
+        self.cur = 0  # initliazed as null
+        self.end = 1
+        while self.cur < self.end:
+            self.res1.append(self.fifo[self.cur].val)
+            if self.fifo[self.cur].left is not None:
+                self.fifo.append(self.fifo[self.cur].left)
+                self.end += 1
+            if self.fifo[self.cur].right is not None:
+                self.fifo.append(self.fifo[self.cur].right)
+                self.end += 1
+            self.cur += 1
+        return self.res1
 
     def trans_form(self, node_index_list):
         """
@@ -257,8 +301,8 @@ if __name__ == "__main__":
     binarytree = BinaryTree()
     trees = []
 
-    # tree = binarytree.create_binary_tree(['0', '1', '2', '3', '4', '5', '6'])
-    # binarytree.print_tree(tree)
+    tree_full = binarytree.create_binary_tree(['0', '1', '2', '3', '4', '5', '6'])
+    binarytree.print_tree(tree_full)
 
     # load trees from init data file
     f = open("tree_init.txt", "r", encoding="utf-8")
@@ -276,11 +320,17 @@ if __name__ == "__main__":
 
     # test
     for tree in trees:
-        binarytree.print_tree(tree)
+        # binarytree.print_tree(tree)
         # 校验先序遍历结果
+        binarytree = BinaryTree()  # 注意清除每次调用之后的工具内部状态
         assert binarytree.recursion_pre_traverse(tree) == binarytree.non_recursion_pre_traverse(tree), \
             "pre-traverse-error"
         assert binarytree.recursion_mid_traverse(tree) == binarytree.non_recursion_mid_traverse(tree), \
             "mid-traverse-error"
         assert binarytree.recursion_post_traverse(tree) == binarytree.non_recursion_post_traverse(tree), \
             "post-traverse-error"
+
+        # print(",".join(binarytree.level_order_traverse0(tree)))
+        # binarytree.level_order_traverse1(tree)
+        print(",".join(binarytree.level_order_traverse1(tree)))
+    print(",".join(binarytree.level_order_traverse0(tree_full)))
