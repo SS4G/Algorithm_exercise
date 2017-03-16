@@ -18,7 +18,8 @@ class Node:
         self.index = node_index  # 在满二叉树中的绝对位置 根节点为0
 
     def __str__(self):
-        return str(self.val)+","+str(self.index)
+        # return str(self.val)+","+str(self.index)
+        return str(self.val)
 
 
 class BinaryTree:
@@ -137,42 +138,142 @@ class BinaryTree:
         非递归前序遍历
         :return: 返回一个遍历结果的值的列表
         """
+        # enum = ["just_pushed", "printed", "left_traversed", "right_traversed"]
         travese_res = []
         stack = []
         if root is not None:
-            stack.append(root)
-            head = root
-            while stack
+            # 堆栈中的节点有三种
+            stack.append([root, "just_pushed"])
+            while len(stack) > 0:  # 使用一个状态域来记录节点的状态
+                if stack[-1][1] == "just_pushed":  # 子节点均为遍历的情况下 输出值
+                    stack[-1][1] = "printed"  # 状态更新
+                    travese_res.append(stack[-1][0].val)
 
-    def non_recursion_mid_traverse(self):
+                elif stack[-1][1] == "printed":  # 栈顶节点左子树未遍历
+                    stack[-1][1] = "left_traversed"  # 修改老节点的左标记
+                    if stack[-1][0].left is not None:
+                        stack.append([stack[-1][0].left, "just_pushed"])
+
+                elif stack[-1][1] == "left_traversed":  # 栈顶节点右子树未遍历
+                    stack[-1][1] = "right_traversed"  # 修改老节点的左标记
+                    if stack[-1][0].right is not None:
+                        stack.append([stack[-1][0].right, "just_pushed"])
+
+                elif stack[-1][1] == "right_traversed":
+                    stack.pop()
+        return travese_res
+
+    def non_recursion_mid_traverse(self, root):
         """
         非递归中序遍历
         :return: 返回一个遍历结果的值的列表
         """
+        travese_res = []
+        stack = []
+        if root is not None:
+            # 堆栈中的节点有三种
+            stack.append([root, "just_pushed"])
+            while len(stack) > 0:
+                if stack[-1][1] == "left_traversed":  # 子节点均为遍历的情况下 输出值
+                    stack[-1][1] = "printed"  # state update
+                    travese_res.append(stack[-1][0].val)
 
-    def non_recursion_post_traverse(self):
+                elif stack[-1][1] == "just_pushed":  # 栈顶节点左子树未遍历
+                    stack[-1][1] = "left_traversed"  # 修改老节点的左标记
+                    if stack[-1][0].left is not None:
+                        stack.append([stack[-1][0].left, "just_pushed"])
+
+                elif stack[-1][1] == "printed":  # 栈顶节点右子树未遍历
+                    stack[-1][1] = "right_traversed"  # 修改老节点的左标记
+                    if stack[-1][0].right is not None:
+                        stack.append([stack[-1][0].right, "just_pushed"])
+
+                elif stack[-1][1] == "right_traversed":
+                    stack.pop()
+        return travese_res
+
+    def non_recursion_post_traverse(self, root):
         """
         非递归后序遍历
         :return: 返回一个遍历结果的值的列表
         """
+        travese_res = []
+        stack = []
+        if root is not None:
+            # 堆栈中的节点有三种
+            stack.append([root, "just_pushed"])
+            while len(stack) > 0:
+                if stack[-1][1] == "right_traversed":  # 子节点均为遍历的情况下 输出值
+                    stack[-1][1] = "printed"  # state update
+                    travese_res.append(stack[-1][0].val)
 
-    def level_order_traverse(self):
+                elif stack[-1][1] == "just_pushed":  # 栈顶节点左子树未遍历
+                    stack[-1][1] = "left_traversed"  # 修改老节点的左标记
+                    if stack[-1][0].left is not None:
+                        stack.append([stack[-1][0].left, "just_pushed"])
+
+                elif stack[-1][1] == "left_traversed":  # 栈顶节点右子树未遍历
+                    stack[-1][1] = "right_traversed"  # 修改老节点的左标记
+                    if stack[-1][0].right is not None:
+                        stack.append([stack[-1][0].right, "just_pushed"])
+
+                elif stack[-1][1] == "printed":
+                    stack.pop()
+        return travese_res
+
+    def level_order_traverse(self, root):
         """
         二叉树层次遍历
         :return: 返回一个遍历结果的值的列表的列表
         每个子列表 代表一个层次 根节点所在的层为0
         """
 
+    def trans_form(self, node_index_list):
+        """
+        将(坐标，初始值)的列表转化为完全的初始值列表
+        (index,value)
+
+        :param node_index_list:
+        :return:
+        """
+        index_s = map(lambda tu: tu[0], node_index_list)
+        max_index = max(index_s)
+        tree_init_list = [None, ]*(max_index+1)
+        for i in node_index_list:
+            tree_init_list[i[0]] = i[1]
+        return tree_init_list
+
 
 # Test
 if __name__ == "__main__":
 
     binarytree = BinaryTree()
-    tree = binarytree.create_binary_tree(["A", "B", "C", "D", "E", "F", "G", "H", None, None, "I"])
-    binarytree.print_tree(tree)
-    pre_traverse_res = binarytree.recursion_pre_traverse(tree)
-    print(",".join(pre_traverse_res))
-    mid_traverse_res = binarytree.recursion_mid_traverse(tree)
-    print(",".join(mid_traverse_res))
-    post_traverse_res = binarytree.recursion_post_traverse(tree)
-    print(",".join(post_traverse_res))
+    trees = []
+
+    # tree = binarytree.create_binary_tree(['0', '1', '2', '3', '4', '5', '6'])
+    # binarytree.print_tree(tree)
+
+    # load trees from init data file
+    f = open("tree_init.txt", "r", encoding="utf-8")
+    lines = f.readlines()
+    f.close()
+    half_case = map(lambda s: s.strip().split(), filter(lambda line: len(line) > 1, lines))
+    for tree in half_case:
+        tree_init = []
+        for node in tree:
+            l = []
+            l = node.split(",")
+            tree_init.append((int(l[0]), l[1]))
+        full_init_list = binarytree.trans_form(tree_init)
+        trees.append(binarytree.create_binary_tree(init_val_list=full_init_list))
+
+    # test
+    for tree in trees:
+        binarytree.print_tree(tree)
+        # 校验先序遍历结果
+        assert binarytree.recursion_pre_traverse(tree) == binarytree.non_recursion_pre_traverse(tree), \
+            "pre-traverse-error"
+        assert binarytree.recursion_mid_traverse(tree) == binarytree.non_recursion_mid_traverse(tree), \
+            "mid-traverse-error"
+        assert binarytree.recursion_post_traverse(tree) == binarytree.non_recursion_post_traverse(tree), \
+            "post-traverse-error"
