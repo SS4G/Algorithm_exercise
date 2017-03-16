@@ -18,7 +18,7 @@ class Node:
         self.index = node_index  # 在满二叉树中的绝对位置 根节点为0
 
     def __str__(self):
-        return str(self.val)
+        return str(self.val)+","+str(self.index)
 
 
 class BinaryTree:
@@ -46,7 +46,7 @@ class BinaryTree:
         # 其左孩子的坐标为 2*n+1 右孩子的坐标为 2*n+2
         length = len(init_val_list)
         if init_val_list is not None:
-            root = Node(val=init_val_list[0])
+            root = Node(val=init_val_list[0], node_index=0)
             self.add_node(root, 0, length, init_val_list)
         else:
             root = None
@@ -102,26 +102,47 @@ class BinaryTree:
         :return: 返回一个遍历结果的值的列表
         """
         traverse_res = []
-        if root.left is not None:
-            self.recursion_pre_traverse(root.left)
+        if root is not None:
+            traverse_res.append(root.val)
+            traverse_res.extend(self.recursion_pre_traverse(root.left))
+            traverse_res.extend(self.recursion_pre_traverse(root.right))
+        return traverse_res
 
-    def recursion_mid_traverse(self):
+    def recursion_mid_traverse(self, root):
         """
         递归中序遍历
         :return: 返回一个遍历结果的值的列表
         """
+        traverse_res = []
+        if root is not None:
+            traverse_res.extend(self.recursion_mid_traverse(root.left))
+            traverse_res.append(root.val)
+            traverse_res.extend(self.recursion_mid_traverse(root.right))
+        return traverse_res
 
-    def recursion_post_traverse(self):
+    def recursion_post_traverse(self, root):
         """
         递归后序遍历
         :return: 返回一个遍历结果的值的列表
         """
+        traverse_res = []
+        if root is not None:
+            traverse_res.extend(self.recursion_post_traverse(root.left))
+            traverse_res.extend(self.recursion_post_traverse(root.right))
+            traverse_res.append(root.val)
+        return traverse_res
 
-    def non_recursion_pre_traverse(self):
+    def non_recursion_pre_traverse(self, root):
         """
         非递归前序遍历
         :return: 返回一个遍历结果的值的列表
         """
+        travese_res = []
+        stack = []
+        if root is not None:
+            stack.append(root)
+            head = root
+            while stack
 
     def non_recursion_mid_traverse(self):
         """
@@ -145,24 +166,13 @@ class BinaryTree:
 
 # Test
 if __name__ == "__main__":
-    a = Node("A")
-    b = Node("B")
-    c = Node("C")
-    d = Node("D")
-    e = Node("E")
-    f = Node("F")
-    g = Node("G")
-    h = Node("H")
-
-    a.left = b
-    a.right = c
-    b.left = d
-    b.right = e
-    c.left = f
-    c.right = g
-    d.left = h
 
     binarytree = BinaryTree()
-    binarytree.print_tree(a)
-    tree = binarytree.create_binary_tree([0, 1, 2, 3, 4, 5, 6, 7, None, None, 10])
+    tree = binarytree.create_binary_tree(["A", "B", "C", "D", "E", "F", "G", "H", None, None, "I"])
     binarytree.print_tree(tree)
+    pre_traverse_res = binarytree.recursion_pre_traverse(tree)
+    print(",".join(pre_traverse_res))
+    mid_traverse_res = binarytree.recursion_mid_traverse(tree)
+    print(",".join(mid_traverse_res))
+    post_traverse_res = binarytree.recursion_post_traverse(tree)
+    print(",".join(post_traverse_res))
