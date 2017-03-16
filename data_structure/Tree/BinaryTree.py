@@ -221,12 +221,19 @@ class BinaryTree:
                     stack.pop()
         return travese_res
 
-    def level_order_traverse(self, root):
+    def level_order_traverse0(self, root, level=0):
         """
+        空的二叉树的层次为0
+        只有一个节点的二叉树的的level是1
         二叉树层次遍历
+        使用递归的方式实现
         :return: 返回一个遍历结果的值的列表的列表
         每个子列表 代表一个层次 根节点所在的层为0
         """
+
+
+
+
 
     def trans_form(self, node_index_list):
         """
