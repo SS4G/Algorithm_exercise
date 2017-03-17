@@ -126,16 +126,63 @@ class BinarySearchTree(BinaryTree):
         :param BST_root:
         :param val:
         :param lazy:
-        :return:
+        :return: 返回删除后的BST的根节点引用
         """
         if lazy:  # lazy delete just mark delete flag for the note
             node = self.find_in_BST(BST_root, val)
             if node is not None:  # the value exist in the bst
                 node.del_flag = True
+            return BST_root
         else:
-            node = self.find_in_BST(BST_root, val)
-            if node is not None:  # the value tobe deleted was found
-                if node.left
+            last = BST_root  # 用于跟踪待删除节点的父节点
+            tmp = BST_root
+            which_son = "self"
+            while tmp is not None:
+                if tmp.val > val:
+                    last = tmp  # 保存为父节点
+                    which_son = "left"
+                    tmp = tmp.left
+                elif tmp.val < val:
+                    last = tmp  # 保存为父节点
+                    which_son = "right"
+                    tmp = tmp.right
+                elif tmp.val == val:
+                    break
+            if tmp is None:
+                return  # 没有找到要删除的节点
+            elif last is BST_root:  # 要删除的是BST的根节点
+                me = BST_root
+                if (me.left is None) and (me.right is None):  # 左右都为空
+                    return None
+                elif (me.left is None) or (me.right is None):  # 左边或者右边为空
+                    return me.left if me.left is not None else me.right
+                else:  # 两边全部不为空
+                    right_min_node = self.find_min_node(BST_root.right)
+                    # copy the information
+                    me.val = right_min_node.val
+                    me.val_amount = right_min_node.val_amount
+                    me.right = self.delete_in_BST(me.right, me.val) # 递归的删除右子树中的替换值
+                    return BST_root.right
+            else:
+                father = last  # 要删除的节点的父节点
+                me = tmp  # 要删除的节点
+                if (me.left is None) and (me.right is None):
+                    if which_son == "left":
+                        father.left = None
+                    else:
+                        father.right = None
+                elif (me.left is None) or (me.right is None):
+                    if which_son == "left":
+                        father.left = me.left if me.left is not None else me.right
+                    else:
+                        father.right = me.left if me.left is not None else me.right
+                else:  # 两边全部不为空
+                    right_min_node = self.find_min_node(me.right)
+                    # copy the information
+                    me.val = right_min_node.val
+                    me.val_amount = right_min_node.val_amount
+                    me.right = self.delete_in_BST(me.right, me.val)  # 递归的删除右子树中的替换值
+                    return BST_root
 
 
 
