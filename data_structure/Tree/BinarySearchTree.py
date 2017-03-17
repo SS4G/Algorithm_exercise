@@ -1,7 +1,7 @@
 # coding=utf-8
 # Author: SS4G
-# Date 2017/03/16
-# Status:finished
+# Date 2017/03/17
+# Status:constructing
 
 from .BinaryTree import BinaryTree, Node
 
@@ -137,6 +137,7 @@ class BinarySearchTree(BinaryTree):
             last = BST_root  # 用于跟踪待删除节点的父节点
             tmp = BST_root
             which_son = "self"
+            # 找到要删除的值所在的节点 并记录他的父节点 以及他是父节点的哪个孩子
             while tmp is not None:
                 if tmp.val > val:
                     last = tmp  # 保存为父节点
@@ -146,43 +147,46 @@ class BinarySearchTree(BinaryTree):
                     last = tmp  # 保存为父节点
                     which_son = "right"
                     tmp = tmp.right
-                elif tmp.val == val:
+                elif tmp.val == val:  # 查找到对应的节点酒退出
                     break
             if tmp is None:
                 return  # 没有找到要删除的节点
             elif last is BST_root:  # 要删除的是BST的根节点
                 me = BST_root
-                if (me.left is None) and (me.right is None):  # 左右都为空
+                if (me.left is None) and (me.right is None):  # 左右都为空 连根节点都删除了 就返回一个空树
                     return None
-                elif (me.left is None) or (me.right is None):  # 左边或者右边为空
+                elif (me.left is None) or (me.right is None):  # 左边或者右边为空 直接返回左子树或者右子树
                     return me.left if me.left is not None else me.right
                 else:  # 两边全部不为空
+                    # 获取右子树的最小值的节点
                     right_min_node = self.find_min_node(BST_root.right)
-                    # copy the information
+                    # 将右子树最小值的节点的信息复制到要删除的节点中 实际上并不删除这个节点
                     me.val = right_min_node.val
                     me.val_amount = right_min_node.val_amount
-                    me.right = self.delete_in_BST(me.right, me.val) # 递归的删除右子树中的替换值
-                    return BST_root.right
+                    # 要删除的节点的右子树应当更新为删除了最小值节点的右子树
+                    me.right = self.delete_in_BST(me.right, me.val)  # 递归的删除右子树中的替换值
+                    return BST_root
             else:
                 father = last  # 要删除的节点的父节点
                 me = tmp  # 要删除的节点
-                if (me.left is None) and (me.right is None):
+                if (me.left is None) and (me.right is None):  # 要删除的是叶子节点
                     if which_son == "left":
-                        father.left = None
+                        father.left = None  # 直接置空付清对应的指针域 让父亲给抛弃自己
                     else:
                         father.right = None
-                elif (me.left is None) or (me.right is None):
+
+                elif (me.left is None) or (me.right is None):  # 要删除的节点只有一侧子树
                     if which_son == "left":
-                        father.left = me.left if me.left is not None else me.right
+                        father.left = me.left if me.left is not None else me.right  # 直接将子树拼接到父亲的对应位置
                     else:
                         father.right = me.left if me.left is not None else me.right
+
                 else:  # 两边全部不为空
                     right_min_node = self.find_min_node(me.right)
-                    # copy the information
-                    me.val = right_min_node.val
+                    me.val = right_min_node.val  # 同上一部分 并不实际删除 只是修改信息
                     me.val_amount = right_min_node.val_amount
                     me.right = self.delete_in_BST(me.right, me.val)  # 递归的删除右子树中的替换值
-                    return BST_root
+                return BST_root  # 返回根部
 
 
 
