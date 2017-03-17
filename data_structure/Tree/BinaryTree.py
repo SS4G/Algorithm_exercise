@@ -55,6 +55,8 @@ class BinaryTree:
 
     def add_node(self, this_node=None, this_node_index=0, init_val_length=0, init_arr=None):
         """
+        使用类似于先序遍历 但是这个遍历是假设的
+        如果遍历到的节点在初始化列表中可以找的到就添加这个节点 否则就当没有
         :param this_node: 当前节点的 引用
         :param this_node_index: 当前节点在满二叉树中的位置
         :param init_val_length: 初始化时yo
