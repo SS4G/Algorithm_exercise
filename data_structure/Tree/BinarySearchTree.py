@@ -6,8 +6,6 @@
 
 import random
 from Algorithm.data_structure.Tree.BinaryTree import BinaryTree, Node
-import os
-import sys
 
 
 class bstNode(Node):
