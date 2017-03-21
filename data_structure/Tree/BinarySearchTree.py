@@ -1,7 +1,7 @@
 # coding=utf-8
 # Author: SS4G
 # Date 2017/03/17
-# Status:constructing
+# Status:pass
 
 
 import random
@@ -132,6 +132,7 @@ class BinarySearchTree(BinaryTree):
     def delete_in_bst(self, bst_root, val, lazy=False):
         """
         删除对应值的节点 lazy 表示是否为懒惰删除
+        其实这个方法应该改进为更加递归的方法
         :param bst_root:
         :param val:
         :param lazy:
@@ -262,7 +263,10 @@ def testbench(testcases):
     # print(bst.recursion_mid_traverse(new_root))
     # assert bst.recursion_mid_traverse(new_root) == [0, 2, 3, 4, 5, 7]
 
-    for k in range(100):
+    # 生成一个随机的序列 然后插入 生成一颗随机的bst 然后随机的删除其中的元素 知道这个bst为空
+    # 每次删除以后都对这可bst进行中序遍历 看其结果是否正确
+    # 每次删除时同时从初始化生成列表中删除对应值的元素 然后比较删除了对应元素的初始化列表和中序遍历的结果是否相同
+    for k in range(100):  # 进行100次相同的测试
         init_list0 = list(set([random.randint(1, 100) for i in range(200)]))
         length = len(init_list0)
         index_set = set([])
