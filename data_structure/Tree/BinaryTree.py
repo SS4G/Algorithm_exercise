@@ -78,7 +78,8 @@ class BinaryTree:
                 self.add_node(this_node.right, this_node_index=2*this_node_index+2,
                               init_val_length=init_val_length, init_arr=init_arr)
 
-    def print_tree(self, tree, level=0, level_mark="····"):
+    # def print_tree(self, tree, level=0, level_mark="····"):
+    def print_tree(self, tree, level=0, level_mark="----"):
         """
         将二叉树按照层次结构打印出来
         使用类似于文件目录结构的方式

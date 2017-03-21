@@ -3,8 +3,11 @@
 # Date 2017/03/17
 # Status:constructing
 
-from .BinaryTree import BinaryTree, Node
+
 import random
+from Algorithm.data_structure.Tree.BinaryTree import BinaryTree, Node
+import os
+import sys
 
 
 class bstNode(Node):
@@ -15,13 +18,17 @@ class bstNode(Node):
         Node.__init__(self, val=val)
         # self.value
         self.val_amount = 1  # 该值节点的重复次数
-        self.del_flag = False  # 懒惰删除标志
+        self.del_flag = False  # 懒惰删除标志import
 
     def __str__(self):
         return str(self.val)+":"+str(self.val_amount)
 
 
 class BinarySearchTree(BinaryTree):
+    """
+    二叉排序树
+    若在插入时 树中已经有相同的节点 则将这个节点的val_amount 成员+1
+    """
     def __init__(self):
         BinaryTree.__init__(self)
 
@@ -31,7 +38,8 @@ class BinarySearchTree(BinaryTree):
         else:
             root = bstNode(val=init_array[0])
             for i in range(1, len(init_array)):
-                self.insert_2_bst(init_array[i])
+                self.insert_2_bst(root, init_array[i])
+            return root
 
     def find_in_bst(self, bst_root, val):
         tmp = bst_root
@@ -135,6 +143,7 @@ class BinarySearchTree(BinaryTree):
                 node.del_flag = True
             return bst_root
         else:
+            # print("to del value ", val)
             last = bst_root  # 用于跟踪待删除节点的父节点
             tmp = bst_root
             which_son = "self"
@@ -150,10 +159,15 @@ class BinarySearchTree(BinaryTree):
                     tmp = tmp.right
                 elif tmp.val == val:  # 查找到对应的节点酒退出
                     break
+
             if tmp is None:
-                return  # 没有找到要删除的节点
-            elif last is bst_root:  # 要删除的是bst的根节点
+                return bst_root  # 没有找到要删除的节点
+            elif tmp is bst_root:  # 要删除的是bst的根节点
                 me = bst_root
+                if me.val_amount > 1:
+                    me.val_amount -= 1
+                    return bst_root
+
                 if (me.left is None) and (me.right is None):  # 左右都为空 连根节点都删除了 就返回一个空树
                     return None
                 elif (me.left is None) or (me.right is None):  # 左边或者右边为空 直接返回左子树或者右子树
@@ -170,6 +184,10 @@ class BinarySearchTree(BinaryTree):
             else:
                 father = last  # 要删除的节点的父节点
                 me = tmp  # 要删除的节点
+                if me.val_amount > 1:
+                    me.val_amount -= 1
+                    return bst_root
+
                 if (me.left is None) and (me.right is None):  # 要删除的是叶子节点
                     if which_son == "left":
                         father.left = None  # 直接置空付清对应的指针域 让父亲给抛弃自己
@@ -193,18 +211,83 @@ class BinarySearchTree(BinaryTree):
 # Test
 
 def bst_test_case_gen():
-    f = open("BinarySearchTree_init.txt", "w", encoding="utf-8")
-    case = [1,]
-    f.write(",".join(case))
+    testcases = []
+    res = []
+    case = [1, ]
+    res[:] = case[:]
+    res = list(set(res))
+    res.sort()
+    testcases.append((case, res))
 
     case = [x for x in range(10)]
-    f.write(",".join(case))
+    res = []
+    res[:] = case[:]
+    res = list(set(res))
+    res.sort()
+    testcases.append((case, res))
 
     case = [x for x in range(10)]
     case.reverse()
-    f.write(",".join(case))
+    res = []
+    res[:] = case[:]
+    res = list(set(res))
+    res.sort()
+    testcases.append((case, res))
 
-    case = [random.randint(0,50) for i in range(100)]
+    case = [random.randint(0, 100) for i in range(20)]
+    res = []
+    res[:] = case[:]
+    res = list(set(res))
+    res.sort()
+    testcases.append((case, res))
+    return testcases
+
+
+def testbench(testcases):
+    # 测试插入正确性
+    bst = BinarySearchTree()
+    # for testcase in testcases:
+    #     bst_tree = bst.createbst(testcase[0])
+    #     # print(bst_tree)
+    #     bst.print_tree(bst_tree)
+    #     # print(bst.recursion_mid_traverse(bst_tree))
+    #     # print(testcase[1])
+    #     assert bst.recursion_mid_traverse(bst_tree) == testcase[1], "not match"
+    #     assert bst.find_max_val(bst_tree) == testcase[1][-1], "max value found error"
+    #     assert bst.find_min_val(bst_tree) == testcase[1][0], "min value found error"
+
+    # 删除根节点正确性
+    # root = bst.createbst([1, 2, 5, 7, 4, 3, 0])
+    # new_root = bst.delete_in_bst(root, 1)
+    # print(bst.recursion_mid_traverse(new_root))
+    # assert bst.recursion_mid_traverse(new_root) == [0, 2, 3, 4, 5, 7]
+
+    for k in range(100):
+        init_list0 = list(set([random.randint(1, 100) for i in range(200)]))
+        length = len(init_list0)
+        index_set = set([])
+        index_list = []
+        for i in range(length):
+            index = -1
+            while True:
+                index = random.randint(0, length-1)
+                if index not in index_set:
+                    index_set.add(index)
+                    break
+            index_list.append(index)
+            mark_list = list(map(lambda x: [x, True], init_list0))
+        print(index_list)
+        root = bst.createbst(init_list0)
+        for index in index_list:
+            root = bst.delete_in_bst(root, init_list0[index])
+            mark_list[index][1] = False
+            sorted_res = list(map(lambda x: x[0], filter(lambda a: a[1], mark_list)))
+            sorted_res.sort()
+
+            assert bst.recursion_mid_traverse(root) == sorted_res, "mismatch"
 
 if __name__ == "__main__":
+
+    # testcases0 = bst_test_case_gen()
+    testbench(None)
 
