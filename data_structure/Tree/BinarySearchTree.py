@@ -189,7 +189,6 @@ class BinarySearchTree(BinaryTree):
                     me.right = self.delete_in_bst(me.right, me.val)  # 递归的删除右子树中的替换值
                 return bst_root  # 返回根部
 
-
 # Test
 
 def bst_test_case_gen():
