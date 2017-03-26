@@ -5,9 +5,7 @@
 
 
 import random
-from Algorithm.data_structure.Tree.BinaryTree import BinaryTree, Node
-import os
-import sys
+from AlgorithmTraining.data_structure.Tree.BinaryTree import BinaryTree, Node
 
 
 class bstNode(Node):
@@ -207,7 +205,6 @@ class BinarySearchTree(BinaryTree):
                     me.val_amount = right_min_node.val_amount
                     me.right = self.delete_in_bst(me.right, me.val)  # 递归的删除右子树中的替换值
                 return bst_root  # 返回根部
-
 
 # Test
 
