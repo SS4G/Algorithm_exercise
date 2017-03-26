@@ -111,9 +111,27 @@ class AvlTree(BinarySearchTree):
                     assert False, "我觉得到不了这里"
             else:
                 res_tree_root = bottom_node
+
+        print("inner")
+        self.print_tree(res_tree_root)
+
         return res_tree_root
 
     def single_rotate_tree(self, root, is_left=True):
+        """
+        a b 是单层节点 c d e 是树（包括空树的情况）
+        仅仅以左侧不平衡的情况为例子
+        正确的情况是ce是高度一样的树 d.height<=c.height
+        现在在左侧 c的高度 大于 e的高度
+               a           b
+              / \         / \
+             b  e  ----> c  a
+            /\             / \
+           c d            d  e
+        :param root:
+        :param is_left:
+        :return:
+        """
         if is_left:
             a = root
             b = a.left
@@ -130,10 +148,25 @@ class AvlTree(BinarySearchTree):
             e = a.left
             b.left = a
             a.right = d
-        b.height += 1
+
+        a.height = max(a.left_height(), a.right_height())+1  # update the height after adjust
+        b.height = max(b.left_height(), b.right_height())+1
         return b
 
     def double_rotate_tree(self, root, is_left=True):
+        """
+        a b c 是单个节点 d f g 是树 高度一样
+            a                 c
+           / \               / \
+          b  d              b  a
+         / \               /\  /\
+        e  c     ---->    e f g d
+          / \
+         f  g
+        :param root:
+        :param is_left:
+        :return:
+        """
         if is_left:
             a = root
             b = a.left
@@ -237,9 +270,8 @@ class Avl_Test:
     def gen_testcases(self):
         test_cases = []
         CASE_MAX_VAL = 200
-        CASE_MAX_LEN = 1000
+        CASE_MAX_LEN = 10
         CASE_MAX_AMOUNT = 1000
-        test_cases.append([])
         test_cases.append([1, ])
         test_cases.append([1, 2])
         test_cases.append([1, 2, 3, 4, 5])
@@ -252,13 +284,29 @@ class Avl_Test:
 
         return test_cases
 
+    def save_test_cases(self, testcases):
+        f = open("avl_testcase.txt", "w", encoding="utf-8")
+        for testcase in testcases:
+            f.write("\t".join([str(i) for i in testcase])+"\n")
+        f.close()
+
+    def load_testcases(self):
+        f = open("avl_testcase.txt", "r", encoding="utf-8")
+        testcases = [list(map(lambda x: int(x), line.strip().split("\t"))) for line in f]
+        f.close()
+        return testcases
+
     def main_testbench(self):
-        testcases = self.gen_testcases()
+        # self.save_test_cases(self.gen_testcases())
+        # use generated testcase
+        testcases = self.load_testcases()
+
         for init_list in testcases:
             tree_tool = AvlTree()
+            print(init_list)
             root = tree_tool.createAvlTree(init_list)
             # debug
-            print(init_list)
+
             tree_tool.print_tree(root)
 
             self.order_test(root, init_list)
