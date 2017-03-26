@@ -61,7 +61,7 @@ class AvlTree(BinarySearchTree):
                 else:  # you still need find
                     ptr = ptr.right
             else:  # the value is already exist
-                return 
+                return root
 
         # back track to find the out of balanced tree node
         # father_flag 的枚举常量记录当前要旋转的树是他父亲的左节点还是右节点 还是他根本就没有父亲
@@ -112,8 +112,8 @@ class AvlTree(BinarySearchTree):
             else:
                 res_tree_root = bottom_node
 
-        print("inner")
-        self.print_tree(res_tree_root)
+        # debug:# print("inner")
+        # debug:# self.print_tree(res_tree_root)
 
         return res_tree_root
 
@@ -135,20 +135,22 @@ class AvlTree(BinarySearchTree):
         if is_left:
             a = root
             b = a.left
-            c = b.left
+            # c = b.left
             d = b.right
-            e = a.right
+            # e = a.right
             b.right = a
             a.left = d
         else:
             a = root
             b = a.right
-            c = b.right
+            # c = b.right
             d = b.left
-            e = a.left
+            # e = a.left
             b.left = a
             a.right = d
 
+        # pay attention to the order when update the height of the tree
+        # from the bottom to the top
         a.height = max(a.left_height(), a.right_height())+1  # update the height after adjust
         b.height = max(b.left_height(), b.right_height())+1
         return b
@@ -195,7 +197,12 @@ class AvlTree(BinarySearchTree):
             b.left = f
             a.right = g
             a.left = d
-        c.height += 1
+
+        # pay attention to the order when update the height of the tree
+        # from the bottom to the top
+        a.height = max(a.left_height(), a.right_height())+1  # update the height after adjust
+        b.height = max(b.left_height(), b.right_height())+1
+        c.height = max(c.left_height(), c.right_height())+1
         return c
 
 
@@ -263,18 +270,23 @@ class Avl_Test:
         :return:
         """
         traverse_list = self.bst2arr(root)
-        init_copy = init_list.copy()
+        init_copy = list(set(init_list.copy()))
         init_copy.sort()
-        assert traverse_list == init_copy, "order test failure"
+        assert traverse_list == init_copy, "order test failure" + \
+            "\noriginal list:" + "\t".join([str(i) for i in init_copy]) + \
+            "\nnow list:" + "\t".join([str(i) for i in traverse_list])
 
     def gen_testcases(self):
         test_cases = []
         CASE_MAX_VAL = 200
-        CASE_MAX_LEN = 10
+        CASE_MAX_LEN = 1000
         CASE_MAX_AMOUNT = 1000
         test_cases.append([1, ])
         test_cases.append([1, 2])
         test_cases.append([1, 2, 3, 4, 5])
+        test_cases.append([5, 4, 3, 2, 1, 0])
+        test_cases.append([10, 11, 12, 13, 14, 15, 5, 4, 3, 2, 1, 0])
+        test_cases.append([1, 1, 1, 1, 1, ])
         random.randint(0, 100)
         for i in range(CASE_MAX_AMOUNT-4):
             a = []
@@ -285,37 +297,48 @@ class Avl_Test:
         return test_cases
 
     def save_test_cases(self, testcases):
-        f = open("avl_testcase.txt", "w", encoding="utf-8")
+        f = open("AvlTree_testcase0.txt", "w", encoding="utf-8")
         for testcase in testcases:
             f.write("\t".join([str(i) for i in testcase])+"\n")
         f.close()
 
     def load_testcases(self):
-        f = open("avl_testcase.txt", "r", encoding="utf-8")
+        f = open("AvlTree_testcase0.txt", "r", encoding="utf-8")
         testcases = [list(map(lambda x: int(x), line.strip().split("\t"))) for line in f]
         f.close()
         return testcases
 
-    def main_testbench(self):
-        # self.save_test_cases(self.gen_testcases())
-        # use generated testcase
-        testcases = self.load_testcases()
-
-        for init_list in testcases:
-            tree_tool = AvlTree()
-            print(init_list)
-            root = tree_tool.createAvlTree(init_list)
-            # debug
-
-            tree_tool.print_tree(root)
-
-            self.order_test(root, init_list)
-            self.height_balance_test(root)
-        print("all test passed successfully!")
+    def main_testbench(self, operation_list):
+        """
+        :param operation_list: operations to be execute
+        :return:
+        """
+        for operation in operation_list:
+            if operation == "generate_testcase":
+                # test step0 :generate testcase and save them in file AvlTree_testcase0.txt
+                self.save_test_cases(self.gen_testcases())
+            elif operation == "execute_testcase":
+                # load the generated testcase
+                testcases = self.load_testcases()
+                testcases.append([])
+                k = 0
+                for init_list in testcases:
+                    tree_tool = AvlTree()
+                    # debug# print(init_list)
+                    root = tree_tool.createAvlTree(init_list)
+                    # debug# tree_tool.print_tree(root)
+                    self.order_test(root, init_list)
+                    self.height_balance_test(root)
+                    print(k, "case passed!")
+                    k += 1
+                print("all test passed successfully!")
 
 # Test
 if __name__ == "__main__":
     t = Avl_Test()
-    t.main_testbench()
+    # operation_args = ["generate_testcase", "execute_testcase"]
+    # operation_args = ["generate_testcase", ]
+    operation_args = ["execute_testcase", ]
+    t.main_testbench(operation_args)
 
 
