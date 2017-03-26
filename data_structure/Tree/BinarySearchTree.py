@@ -5,7 +5,7 @@
 
 
 import random
-from Algorithm.data_structure.Tree.BinaryTree import BinaryTree, Node
+from AlgorithmTraining.data_structure.Tree.BinaryTree import BinaryTree, Node
 
 
 class bstNode(Node):
