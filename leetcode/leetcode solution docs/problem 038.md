@@ -16,7 +16,7 @@ Note: The sequence of integers will be represented as a string.
 很简单 直接上代码 beat 70%
 
 ##### code
-```
+```Python
 class Solution(object):
     def countAndSay(self, n):
         """

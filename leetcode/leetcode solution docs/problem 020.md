@@ -12,7 +12,7 @@ The brackets must close in the correct order, "()" and "()[]{}" are all valid bu
 如果全部匹配成功 则最后遍历完整个字符串后 堆栈将是空的
 ##### code
 
-```
+```Python
 class Solution(object):
     def isValid(self, s):
         """
