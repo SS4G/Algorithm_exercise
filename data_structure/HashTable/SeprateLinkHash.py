@@ -2,10 +2,11 @@ class HashNode:
     """
     哈希链表的节点
     """
-    def __init__(self, keyword=None,val=None):
+    def __init__(self, keyword=None, val=None):
         self.val = val
         self.keyword = keyword
         self.next = None
+
 
 class SepreateLinkHash:
     """
@@ -27,7 +28,7 @@ class SepreateLinkHash:
         :return: 返回求得的哈希值
         暂时使用求余数运算 是一个可以替换的函数
         """
-        return keyword%table_size
+        return keyword % table_size
 
     def create_hash_table(self, table_size=10):
         list0 = [None, ]*table_size

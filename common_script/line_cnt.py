@@ -1,4 +1,6 @@
 import os
+
+
 def get_all_file(base_dir, file_list=None):
     if file_list is None:
         file_list = []
@@ -25,11 +27,10 @@ def get_all_file(base_dir, file_list=None):
         return None
 
 
-
 if __name__ == "__main__":
     # arguments
     # 要计算的基础目录
-    base_dir = "/home/mi/workspace0" # os.getcwd()
+    base_dir = "/home/mi/workspace0"  # os.getcwd()
     # 要统计的文件扩展名（仅限于文本文件 二进制文件不行）
     cnt_file_type = ["scala", "java", "py", "xml", "js", "sh"]
     extname_set = set([])
