@@ -1,6 +1,6 @@
 # coding=utf-8
 # Author: SS4G
-# Date 2017/03/09
+# Date 2017/03/30
 # all test case passed
 
 import random
