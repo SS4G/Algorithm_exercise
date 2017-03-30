@@ -1,30 +1,19 @@
 import os
-
+def get_all_file0(base_dir):
+    file_list = []
+    get_all_file(base_dir, file_list=file_list)
+    return file_list
 
 def get_all_file(base_dir, file_list=None):
-    if file_list is None:
-        file_list = []
-        this_folder = os.listdir(base_dir)
-        for name in this_folder:
-            if os.path.isfile(base_dir+"/"+name):
-                file_list.append(base_dir+"/"+name)
-            elif os.path.isdir(base_dir+"/"+name):
-                get_all_file(base_dir+"/"+name, file_list=file_list)
-            else:
-                print("这是什么文件？？")
-                pass
-        return file_list
-    else:
-        this_folder = os.listdir(base_dir)
-        for name in this_folder:
-            if os.path.isfile(base_dir + "/" + name):
-                file_list.append(base_dir + "/" + name)
-            elif os.path.isdir(base_dir + "/" + name):
-                get_all_file(base_dir + "/" + name, file_list=file_list)
-            else:
-                print("这是什么文件？？")
-                pass
-        return None
+    this_folder = os.listdir(base_dir)
+    for name in this_folder:
+        if os.path.isfile(base_dir + "/" + name):
+            file_list.append(base_dir + "/" + name)
+        elif os.path.isdir(base_dir + "/" + name):
+            get_all_file(base_dir + "/" + name, file_list=file_list)
+        else:
+            print("这是什么文件？？")
+    return None
 
 
 if __name__ == "__main__":
@@ -37,7 +26,7 @@ if __name__ == "__main__":
 
     print(base_dir)
     filename_list = []
-    all_files = get_all_file(base_dir)
+    all_files = get_all_file0(base_dir)
     # extname_set = set(filter(lambda str:len(str)<10, [name.split(".")[-1] for name in all_files]))
     # print(extname_set)
 
