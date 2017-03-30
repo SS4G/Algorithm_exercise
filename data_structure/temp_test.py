@@ -1,11 +1,6 @@
-class Obj:
-    def __init__(self, val):
-        self.val = val
-    def replace_self(self):
-        self = Obj(val=self.val+1)
-
-a = Obj(1)
-print(id(a))
-a.replace_self()
-print(id(a))
-print(a.val)
+a = 1
+b = 1
+def modify(z):
+    z = 9
+modify(a)
+print(a)
