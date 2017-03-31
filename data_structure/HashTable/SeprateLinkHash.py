@@ -14,7 +14,7 @@ class HashNode:
         self.next = None
 
 
-class SepreateLinkHash:
+class Hash_SepreateLink:
     """
     使用分离链接发构建的哈希表
     调用构造函数返回的是哈希表对象
@@ -87,7 +87,7 @@ class SepreateLinkHash:
         :return:
         """
         print("rehash invoked!", self.table_size)
-        new_hash_table = SepreateLinkHash(table_size=2*self.table_size, hash_function=self.hash_fun)
+        new_hash_table = Hash_SepreateLink(table_size=2*self.table_size, hash_function=self.hash_fun)
         for keyword_head in self.table:
             tmp = keyword_head
             while tmp is not None:
@@ -135,7 +135,7 @@ class HashTable_tb:
                 self.save_testcase(testcase0)
             elif operation == 2:
                 testcase1 = self.load_testcase()
-                s_hashtable = SepreateLinkHash()
+                s_hashtable = Hash_SepreateLink()
                 for case in testcase1:
                     s_hashtable.insert(keyword=case[0], val=case[1])
                 for case in testcase1:
