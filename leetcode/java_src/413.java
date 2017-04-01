@@ -1,7 +1,8 @@
 /**
  * Created by VULCAN on 2017/2/5.
  */
-public class Leet413 {
+package AlgorithmTraining.leetcode.java_src;
+class Leet413 {
     public int numberOfArithmeticSlices(int[] A) {
         //int length=A.length;
         int continue_arth=0;
