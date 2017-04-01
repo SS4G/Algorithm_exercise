@@ -47,4 +47,5 @@ if __name__ == "__main__":
     for type in CountByType_dict:
         print("type ", type, "  has :", CountByType_dict[type], " lines")
         total += CountByType_dict[type]
+
     print("total lines is :", total)
