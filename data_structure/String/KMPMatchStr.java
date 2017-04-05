@@ -2,6 +2,7 @@ package AlgorithmTraining.data_structure.String;
 
 /**
  * Created by mi on 17-4-1.
+ * $todo kmp is under constructing
  */
 public class KMPMatchStr {
     public static void main(String[] args){
