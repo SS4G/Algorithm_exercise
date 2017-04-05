@@ -21,9 +21,9 @@ def get_file_type(file_name):
 if __name__ == "__main__":
     # arguments
     # 要计算的基础目录
-    base_dir = "/home/mi/SS4G/Alf_linux2/AlgorithmTraining"  # os.getcwd()
+    base_dir = "/home/mi/SS4G/Alf_py_linux2/AlgorithmTraining"  # os.getcwd()
     # 要统计的文件扩展名（仅限于文本文件 二进制文件不行）
-    cnt_file_type = ["java", "py", "c"]
+    cnt_file_type = ["java", "py", "c", "cpp"]
     # extname_set = set([])
 
     print("statistic directory is :",base_dir)
