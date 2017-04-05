@@ -12,7 +12,7 @@ class QuickFind:
         length是所有不同节点的个数
         :param length:
         """
-        self.item_arr = [j for j in range(length)]
+        self.item_arr = [j for j in range(length)]  # 由节点id作为索引
         self.node_amount = length
         self.union_cnt = length
 

@@ -1,10 +1,11 @@
 # 并查集 quick-union 版本
 # 该版本将两个分量链接在一起时较快
+# 总是将小的分量链接在大的分量上 可以保证权重为k是 树的深度小于lg(k)
 # author:g55
 # date April 5th 2017
-# status: constructing  $todo unfinished
+# status: complete
 import os
-class QuickFind:
+class WeightedQuickFind:
     def __init__(self, length):
         """
         所有节点所属的连通分量最初使用节点的名称来表示
@@ -12,7 +13,8 @@ class QuickFind:
         length是所有不同节点的个数
         :param length:
         """
-        self.item_arr = [j for j in range(length)]
+        self.item_arr = [j for j in range(length)]  # 由节点id作为索引
+        self.item_weight_arr = [1 for j in range(length)]
         self.node_amount = length
         self.union_cnt = length
 
@@ -38,7 +40,12 @@ class QuickFind:
         p_id = self.find(p)
         q_id = self.find(q)
         if p_id != q_id:
-            self.item_arr[p_id] = q_id # p link to q here is randomly
+            if self.item_weight_arr[p_id] > self.item_weight_arr[q_id]:
+                self.item_arr[q_id] = p_id # 把权重小的树挂在权重大的树上面
+                self.item_weight_arr[p_id] += self.item_weight_arr[q_id]
+            else:
+                self.item_arr[p_id] = q_id  # 把权重小的树挂在权重大的树上面
+                self.item_weight_arr[q_id] += self.item_weight_arr[p_id]
             self.union_cnt -= 1
         return None
 
@@ -62,7 +69,7 @@ if __name__ == "__main__":
         testcase_pairs = [(int(j[0]), int(j[1])) for j in [i.strip().split() for i in lines[1:] if len(i)>=2]]
         f.close()
 
-        quf = QuickFind(testcase_length)
+        quf = WeightedQuickFind(testcase_length)
         for pair in testcase_pairs:
             quf.union(pair[0], pair[1])
         assert quf.union_count()==union_amount, "result ERROR: test file has %d unions." % union_amount
