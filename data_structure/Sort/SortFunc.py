@@ -276,30 +276,27 @@ class SortFunc:
         return a
 
     # below is heap sort func
-    def adjust_heap(self, heap, this_index, heap_len):
+    def adjust_heap(self, heap, top_index, heap_len):
         """
         调整为小顶堆
         :param heap: 堆的数组
-        :param this_index: 当前操作的子堆的堆顶
+        :param top_index: 当前操作的子堆的堆顶
         :return:
         """
-        l_child = this_index*2+1
-        r_child = this_index*2+2
-        father = (this_index-1) >> 1
+        l_child = top_index*2+1
+        r_child = top_index*2+2
         if heap_len == 0:
             return None
         if l_child >= heap_len:  # 表明当前的节点是叶子节点
             return None
         elif r_child >= heap_len:  # 表明当前节点只有左孩子
-            if heap[l_child] < heap[this_index]:
-                heap[l_child], heap[this_index] = heap[this_index], heap[l_child]
+            if heap[l_child] < heap[top_index]:
+                heap[l_child], heap[top_index] = heap[top_index], heap[l_child]
             return None
 
-        l_child_val = heap[l_child]
-        r_child_val = heap[r_child]
         smaller_index = l_child if heap[l_child] < heap[r_child] else r_child  # 获取左右孩子的较大节点
-        if heap[this_index] > heap[smaller_index]:
-            heap[this_index], heap[smaller_index] = heap[smaller_index], heap[this_index]
+        if heap[top_index] > heap[smaller_index]:
+            heap[top_index], heap[smaller_index] = heap[smaller_index], heap[top_index]
             self.adjust_heap(heap, smaller_index, heap_len)  # 递归的调整小顶堆
 
     def heap_sorted(self, array):
