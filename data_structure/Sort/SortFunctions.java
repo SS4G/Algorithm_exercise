@@ -103,7 +103,6 @@ class SortTemplate {
         return minIndex;
     }
 
-
     // test
     public static void main(String[] args) {
         // reverse test
@@ -118,7 +117,7 @@ class SortTemplate {
  * 冒泡排序
  */
 class BubleSort extends SortTemplate {
-    public static void sort(Comparable[] arr){
+    public static Comparable[] sort(Comparable[] arr){
         int hi = arr.length;
         int lo = 0;
         for(int i=lo; i < hi; i++)
@@ -127,6 +126,7 @@ class BubleSort extends SortTemplate {
                     exch(arr, i, j);
                 }
             }
+        return arr;
     }
 }
 
@@ -134,7 +134,7 @@ class BubleSort extends SortTemplate {
  * 选择排序
  */
 class SelectSort extends SortTemplate {
-    public static void sort(Comparable[] arr) {
+    public static Comparable[] sort(Comparable[] arr) {
         int hi = arr.length;
         int lo = 0;
         int minElementIndex = -1;
@@ -142,11 +142,15 @@ class SelectSort extends SortTemplate {
             minElementIndex = findMinElementIndex(arr, i, hi);
             exch(arr, minElementIndex, i);
         }
+        return arr;
     }
 }
 
+/**
+ * 插入排序
+ */
 class InsertSort extends SortTemplate {
-    public static void sort(Comparable[] arr) {
+    public static Comparable[] sort(Comparable[] arr) {
         int i = 0, j = 0;
         Comparable tmp = null;
         while (i < arr.length) {
@@ -163,9 +167,13 @@ class InsertSort extends SortTemplate {
             arr[j + 1] = tmp;
             i++;
         }
+        return arr;
     }
 }
 
+/**
+ * 希尔排序 使用2的幂 作为希尔序列
+ */
 class ShellSort extends SortTemplate {
     private static void insertStepSort(Comparable[] arr, int offset, int step) {
         // assert offset < step
@@ -186,7 +194,7 @@ class ShellSort extends SortTemplate {
             i += step;
         }
     }
-    public static void sort(Comparable[] arr) {
+    public static Comparable[] sort(Comparable[] arr) {
         int h = 1;
         int halfLength = arr.length >>> 1;
         //产生希尔排序的序列 本次使用的是2的幂
@@ -201,10 +209,14 @@ class ShellSort extends SortTemplate {
             }
             h >>>= 1;
         }
+        return arr;
     }
 }
 
-class MergeSort extends SortTemplate{
+/**
+ * 归并排序
+ */
+class MergeSort extends SortTemplate {
     //使用原地merge的方法
     //辅助数组arr_copy需要事先分配好 和arr 大小相同
     //int li0/1, int hi0/1 两段段数组的上下界 含li 不含hi
@@ -242,24 +254,77 @@ class MergeSort extends SortTemplate{
         }
     }
 
-    public static void sort(Comparable[] arr){
+    public static Comparable[] sort(Comparable[] arr){
         int size = arr.length;
         int half_size = size >>> 1;
+        boolean turnFlag = true;
         if (size > 1) {
             Comparable[] arr_copy = new Comparable[size];
-            int splitSzie = 2;  // must be an even number
+            int splitSzie = 2;  // 要归并的长度的2倍 即当前归并的子序列的长度为1
             int offset = 0;
             int li0, hi0, li1, hi1;
             while (splitSzie < half_size) {
-                li0 = offset;
-                hi0 = offset + (splitSzie >>> 1);
-                li1 = offset + (splitSzie >>> 1);
-                hi1 = offset + splitSzie > size ? size : offset + splitSzie;
-                merge(arr, arr_copy, li0, hi0, li1, hi1);
+                while (offset < size) {
+                    li0 = offset;
+                    hi0 = offset + (splitSzie >>> 1);
+                    li1 = offset + (splitSzie >>> 1);
+                    hi1 = offset + splitSzie > size ? size : offset + splitSzie;
+                    if (turnFlag)
+                        merge(arr, arr_copy, li0, hi0, li1, hi1);
+                    else
+                        merge(arr_copy, arr, li0, hi0, li1, hi1);
+                    offset += splitSzie; //偏移到下一归并块
+                }
+                splitSzie <<= 1;
+                turnFlag = !turnFlag; //进行交替的拷贝
             }
+            return turnFlag ? arr_copy : arr;
         }
+        else
+            return arr;
     }
 }
 
+/**
+ * 快速排序三切分法
+ */
+class QuickSort3Split extends SortTemplate {
+    private static void sortPart(Comparable[] arr, int lo, int hi) {
+        //sort part is [lo, hi)
+        Comparable v = null;
+        int lt, gt, cur;
+        if (lo - hi > 2) {
+            v = arr[lo];
+            lt = lo + 1;
+            gt = hi - 1;
+            while (true) {
+                while (lessThan(arr[lt], v) && lt < hi - 1) lt++; // stop at element no less than v
+                while (!lessThan(arr[gt], v) && gt > lo) gt--; // stop at element less than v
+                if (lt >= gt) break;
+                exch(arr, lt, gt);
+            }
+            exch
+        }
+        else if (hi - lo == 2) { //处理长度为2的小情况
+            v = arr[lo];
+            if (greaterThan(v, arr[1])) {
+                arr[lo] = arr[hi - 1];
+                arr[hi - 1] = v;
+            }
+        }
+        else
+            ;
 
+    }
+    public static Comparable[] sort(Comparable[] arr) {
+
+    }
+}
+
+/**
+ * 普通交换快速排序
+ */
+class QuickSortNaive extends SortTemplate {
+
+}
 
