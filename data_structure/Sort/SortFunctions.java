@@ -290,34 +290,17 @@ class MergeSort extends SortTemplate {
  */
 class QuickSort3Split extends SortTemplate {
     private static void sortPart(Comparable[] arr, int lo, int hi) {
-        //sort part is [lo, hi)
         Comparable v = null;
-        int lt, gt, cur;
-        if (lo - hi > 2) {
+        int cur = lo;
+        int lt, gt;
+        if (hi - lo > 2) {
             v = arr[lo];
+            cur = lo + 1;
             lt = lo + 1;
             gt = hi - 1;
-            while (true) {
-                while (lessThan(arr[lt], v) && lt < hi - 1) lt++; // stop at element no less than v
-                while (!lessThan(arr[gt], v) && gt > lo) gt--; // stop at element less than v
-                if (lt >= gt) break;
-                exch(arr, lt, gt);
-            }
-            exch
-        }
-        else if (hi - lo == 2) { //处理长度为2的小情况
-            v = arr[lo];
-            if (greaterThan(v, arr[1])) {
-                arr[lo] = arr[hi - 1];
-                arr[hi - 1] = v;
-            }
-        }
-        else
-            ;
+            while (cur <= gt) 
 
-    }
-    public static Comparable[] sort(Comparable[] arr) {
-
+        }
     }
 }
 
@@ -325,6 +308,42 @@ class QuickSort3Split extends SortTemplate {
  * 普通交换快速排序
  */
 class QuickSortNaive extends SortTemplate {
+    private static void sortPart(Comparable[] arr, int lo, int hi) {
+        //sort part is [lo, hi)
+        Comparable v = null;
+        int lt, gt;
+        lt = lo + 1;
+        gt = hi - 1;
+        if (hi - lo > 0) {
+            v = arr[lo];
+            while (true) {
+                while (lessThan(arr[lt], v) && lt < hi) lt++; // stop at element no less than v
+                while (!lessThan(arr[gt], v) && gt > lo) gt--; // stop at element less than v
+                if (lt >= gt) break;
+                exch(arr, lt, gt);
+            }
+            exch(arr, gt, lo);
+        }
+        sortPart(arr, lo, gt);
+        sortPart(arr, gt + 1, hi);
+    }
+    public static Comparable[] sort(Comparable[] arr) {
+        sortPart(arr, 0, arr.length);
+        return arr;
+    }
+}
 
+class HeapSort extends SortTemplate {
+    private int getFather(int thisIndex) {
+
+    }
+
+    private int getLeft(int thisIndex) {
+
+    }
+
+    private int getRight(int thisIndex) {
+
+    }
 }
 
