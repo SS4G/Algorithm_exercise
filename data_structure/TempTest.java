@@ -6,6 +6,6 @@ package AlgorithmTraining.data_structure;
 public class TempTest {
     public static void main(String[] args) {
         int[] arr = null;
-        System.out.println(arr.length);
+        System.out.println("JJ" == "JJ");
     }
 }

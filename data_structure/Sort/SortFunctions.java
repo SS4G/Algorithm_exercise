@@ -103,6 +103,14 @@ class SortTemplate {
         return minIndex;
     }
 
+    public static void showArr(Object[] arr, String info) {
+        System.out.println(info);
+        for(Object o : arr) {
+            System.out.print(o);
+            System.out.print(",");
+        }
+        System.out.println("\n");
+    }
     // test
     public static void main(String[] args) {
         // reverse test
@@ -116,7 +124,7 @@ class SortTemplate {
 /**
  * 冒泡排序
  */
-class BubleSort extends SortTemplate {
+class BubbleSort extends SortTemplate {
     public static Comparable[] sort(Comparable[] arr){
         int hi = arr.length;
         int lo = 0;
@@ -156,7 +164,7 @@ class InsertSort extends SortTemplate {
         while (i < arr.length) {
             tmp = arr[i];
             j = i-1;
-            while (j > 0) {
+            while (j >= 0) {
                 if (greaterThan(arr[j], tmp)) {
                     arr[j + 1] = arr[j];
                     j--;
@@ -182,7 +190,7 @@ class ShellSort extends SortTemplate {
         while (i < arr.length) {
             tmp = arr[i];
             j = i - step;
-            while (j > 0) {
+            while (j >= 0) {
                 if (greaterThan(arr[j], tmp)) {
                     arr[j + step] = arr[j];
                     j -= step;
@@ -211,6 +219,12 @@ class ShellSort extends SortTemplate {
         }
         return arr;
     }
+    public static void main(String[] args) {
+        Integer[] arr0 = {10, 9, 8, 7, 6, 5, 4, 3, 2, 1};
+        showArr(arr0, "integr array before shell sort:");
+        insertStepSort(arr0, 0, 1);
+        showArr(arr0, "integer array after shell sort");
+    }
 }
 
 /**
@@ -226,6 +240,9 @@ class MergeSort extends SortTemplate {
         int index0 = li0;
         int index1 = li1;
         while (index0 < hi0 && index1 < hi1) {
+            //int z0 = ((Integer)arr[index0]).intValue();
+            //int z1 = ((Integer)arr[index1]).intValue();
+            //System.out.println(z0+":"+z1);
             if (lessThan(arr[index0], arr[index1])) {
                 arr_copy[index] = arr[index0];
                 index0++;
@@ -255,20 +272,21 @@ class MergeSort extends SortTemplate {
     }
 
     public static Comparable[] sort(Comparable[] arr){
+        //$todo debugging merge sort
         int size = arr.length;
         int half_size = size >>> 1;
         boolean turnFlag = true;
+        Comparable[] arr_copy = new Comparable[size];
         if (size > 1) {
-            Comparable[] arr_copy = new Comparable[size];
             int splitSzie = 2;  // 要归并的长度的2倍 即当前归并的子序列的长度为1
             int offset = 0;
             int li0, hi0, li1, hi1;
-            while (splitSzie < half_size) {
-                while (offset < size) {
+            while (!((splitSzie >>> 1) <= size && (splitSzie) >= size)) {
+                while (offset < size) { //两段两段的合并
                     li0 = offset;
                     hi0 = offset + (splitSzie >>> 1);
                     li1 = offset + (splitSzie >>> 1);
-                    hi1 = offset + splitSzie > size ? size : offset + splitSzie;
+                    hi1 = offset + splitSzie >= size ? size : offset + splitSzie;
                     if (turnFlag)
                         merge(arr, arr_copy, li0, hi0, li1, hi1);
                     else
@@ -278,10 +296,20 @@ class MergeSort extends SortTemplate {
                 splitSzie <<= 1;
                 turnFlag = !turnFlag; //进行交替的拷贝
             }
-            return turnFlag ? arr_copy : arr;
+            showArr(arr, "arr");
+            showArr(arr_copy, "arr_copy");
+            return turnFlag ? arr : arr_copy;
         }
         else
             return arr;
+    }
+
+    public static void main(String[] args) {
+        Integer[] a = {1, 5, 3, 7, 9};
+        Integer[] mini = {11, 9, 7, 5, 3, 1, -1, -2, -3};
+        Integer[] a_c = new Integer[a.length];
+        Comparable[] s = sort(mini);
+        showArr(s, "after");
     }
 }
 
@@ -323,6 +351,11 @@ class QuickSort3Split extends SortTemplate {
         }
         // length <= 1 return directly
     }
+
+    public static Comparable[] sort(Comparable[] arr) {
+        sortPart(arr, 0, arr.length);
+        return arr;
+    }
 }
 
 /**
@@ -361,11 +394,11 @@ class HeapSort extends SortTemplate {
     }
 
     private static int getLeft(int thisIndex) {
-        return thisIndex << 1 + 1;
+        return (thisIndex << 1) + 1; //warning!!  priority << is lower than +-
     }
 
     private static int getRight(int thisIndex) {
-        return thisIndex << 1 + 2;
+        return (thisIndex << 1) + 2;
     }
 
     //将堆调整为小顶堆
@@ -387,11 +420,13 @@ class HeapSort extends SortTemplate {
                 minSonInedex = -1;
 
             if (minSonInedex != -1) {
-                if (lessThan(arr[minSonInedex], tmpTopIndex)) {
+                if (lessThan(arr[minSonInedex], arr[tmpTopIndex])) {
                     //堆顶比最小的子堆顶大 需要调整
                     exch(arr, minSonInedex, tmpTopIndex); //将较小的子堆的顶交换到当前堆顶
                     tmpTopIndex = minSonInedex;//继续检查下面的子堆是否符合要求
                 }
+                else
+                    break;
             }
             else
                 break; //没有左右子树　直接返回
@@ -410,5 +445,13 @@ class HeapSort extends SortTemplate {
             adjustHeap(arrHeap,0, arr.length - 1 - u);
         }
         return arr;
+    }
+
+    public static void main(String[] args) {
+        System.out.println(getLeft(0));
+        System.out.println(getRight(0));
+        System.out.println(getLeft(1));
+        //System.out.println(getLeft());
+        //System.out.println(getLeft(0));
     }
 }
