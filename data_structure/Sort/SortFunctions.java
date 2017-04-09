@@ -298,9 +298,30 @@ class QuickSort3Split extends SortTemplate {
             cur = lo + 1;
             lt = lo + 1;
             gt = hi - 1;
-            while (cur <= gt) 
-
+            while (cur <= gt) {
+                if (lessThan(arr[cur], v)) {
+                    exch(arr, cur, lt);
+                    cur++;
+                    lt++;
+                }
+                else if (greaterThan(arr[cur], v)) {
+                    exch(arr, cur, gt);
+                    gt--;
+                }
+                else
+                    cur++;
+            }
+            if (lt > lo + 1) {
+                exch(arr, lt-1, 0);
+            }
+            sortPart(arr, lo, lt);
+            sortPart(arr, gt+1, hi);
         }
+        else if (hi - lo == 2) {
+            if (!lessThan(arr[0], arr[1]))
+                exch(arr, 0, 1);
+        }
+        // length <= 1 return directly
     }
 }
 
@@ -334,16 +355,60 @@ class QuickSortNaive extends SortTemplate {
 }
 
 class HeapSort extends SortTemplate {
-    private int getFather(int thisIndex) {
-
+    //使用的完全二叉树索引是从０开始的　
+    private static int getFather(int thisIndex) {
+        return (thisIndex - 1) >>> 1;
     }
 
-    private int getLeft(int thisIndex) {
-
+    private static int getLeft(int thisIndex) {
+        return thisIndex << 1 + 1;
     }
 
-    private int getRight(int thisIndex) {
+    private static int getRight(int thisIndex) {
+        return thisIndex << 1 + 2;
+    }
 
+    //将堆调整为小顶堆
+    //该函数已经假设除了堆顶　其左右子树都已经是堆
+    //worst condition  is O(lg(n))
+    private static void adjustHeap(Comparable[] arr, int topIndex, int heapLength) {
+
+        int tmpTopIndex = topIndex;
+        int leftTop, rightTop, minSonInedex;
+        while (tmpTopIndex < heapLength) {
+            leftTop = getLeft(tmpTopIndex);
+            rightTop = getRight(tmpTopIndex);
+            //找出子堆中最小的堆的顶
+            if (leftTop < heapLength && rightTop < heapLength)
+                minSonInedex = lessThan(arr[leftTop], arr[rightTop]) ? leftTop: rightTop;
+            else if (leftTop < heapLength && rightTop >= heapLength) //只有左子堆
+                minSonInedex = leftTop;
+            else//没有子堆
+                minSonInedex = -1;
+
+            if (minSonInedex != -1) {
+                if (lessThan(arr[minSonInedex], tmpTopIndex)) {
+                    //堆顶比最小的子堆顶大 需要调整
+                    exch(arr, minSonInedex, tmpTopIndex); //将较小的子堆的顶交换到当前堆顶
+                    tmpTopIndex = minSonInedex;//继续检查下面的子堆是否符合要求
+                }
+            }
+            else
+                break; //没有左右子树　直接返回
+        }
+    }
+
+    public static Comparable[] sort(Comparable[] arr) {
+        Comparable[] arrHeap = new Comparable[arr.length];
+        for(int u = 0; u < arr.length; u++) arrHeap[u] = arr[u];
+        //创建初始堆
+        for(int u = 0; u < arr.length; u++) adjustHeap(arrHeap, u, arrHeap.length);
+        //排序输出
+        for(int u = 0; u < arr.length; u++) {
+            arr[u] = arrHeap[0];
+            exch(arrHeap, 0, arr.length - 1 - u);
+            adjustHeap(arrHeap,0, arr.length - 1 - u);
+        }
+        return arr;
     }
 }
-
