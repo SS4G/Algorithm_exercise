@@ -133,21 +133,27 @@ public class SortFunctionTest {
                     System.out.println(String.join(",", a));
                 }
             }
+            System.out.println(type+" passed!");
         }
+
     }
 
     public static void main(String[] args){
         // testbench
-        /*String[] typesToBeTest = {"BubleSort", "HeapSort", "MergeSort", "QuickSort", "Quick3SplitSort",
-                "SelectSort", "ShellSort", "InsertSort"};*/
+
         //buble pass
         //heap pass
         //insert pass
         //shell pass
         //select pass
+        //merge sort pass
+        //QuickSortNaive sort pass
         //String[] typesToBeTest = {"BubbleSort", "HeapSort", "InsertSort", "ShellSort", "SelectSort"};
-        String[] typesToBeTest = {"MergeSort"};
-        Comparable[][] testcases = littleTestCaseLoader();
+        //String[] typesToBeTest = {"Quick3SplitSort",};
+        String[] typesToBeTest = {"BubbleSort", "HeapSort", "MergeSort", "QuickSort", "Quick3SplitSort",
+                "SelectSort", "ShellSort", "InsertSort"};
+        //Comparable[][] testcases = littleTestCaseLoader();
+        Comparable[][] testcases = testcase_loader();
         runTest(typesToBeTest, testcases);
         System.out.println("process terminate successfully!");
     }

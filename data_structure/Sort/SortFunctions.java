@@ -274,18 +274,20 @@ class MergeSort extends SortTemplate {
     public static Comparable[] sort(Comparable[] arr){
         //$todo debugging merge sort
         int size = arr.length;
-        int half_size = size >>> 1;
+        int tmpSize = arr.length;
         boolean turnFlag = true;
         Comparable[] arr_copy = new Comparable[size];
         if (size > 1) {
-            int splitSzie = 2;  // 要归并的长度的2倍 即当前归并的子序列的长度为1
-            int offset = 0;
+            while (tmpSize > 2) tmpSize >>>= 1;
+            int splitSzie = tmpSize;  // 要归并的长度的2倍 即当前归并的子序列的长度为1
+            int offset;
             int li0, hi0, li1, hi1;
-            while (!((splitSzie >>> 1) <= size && (splitSzie) >= size)) {
+            while ((splitSzie >>> 1) < size) { //splitSize 首次大于数组长度
+                offset = 0;
                 while (offset < size) { //两段两段的合并
                     li0 = offset;
-                    hi0 = offset + (splitSzie >>> 1);
-                    li1 = offset + (splitSzie >>> 1);
+                    hi0 = (offset + (splitSzie >>> 1)) >= size ? size : (offset + (splitSzie >>> 1));
+                    li1 = hi0;
                     hi1 = offset + splitSzie >= size ? size : offset + splitSzie;
                     if (turnFlag)
                         merge(arr, arr_copy, li0, hi0, li1, hi1);
@@ -296,8 +298,6 @@ class MergeSort extends SortTemplate {
                 splitSzie <<= 1;
                 turnFlag = !turnFlag; //进行交替的拷贝
             }
-            showArr(arr, "arr");
-            showArr(arr_copy, "arr_copy");
             return turnFlag ? arr : arr_copy;
         }
         else
@@ -321,7 +321,7 @@ class QuickSort3Split extends SortTemplate {
         Comparable v = null;
         int cur = lo;
         int lt, gt;
-        if (hi - lo > 2) {
+        if (hi - lo >= 2) {
             v = arr[lo];
             cur = lo + 1;
             lt = lo + 1;
@@ -340,14 +340,10 @@ class QuickSort3Split extends SortTemplate {
                     cur++;
             }
             if (lt > lo + 1) {
-                exch(arr, lt-1, 0);
+                exch(arr, lt-1, lo);
             }
             sortPart(arr, lo, lt);
             sortPart(arr, gt+1, hi);
-        }
-        else if (hi - lo == 2) {
-            if (!lessThan(arr[0], arr[1]))
-                exch(arr, 0, 1);
         }
         // length <= 1 return directly
     }
@@ -356,6 +352,16 @@ class QuickSort3Split extends SortTemplate {
         sortPart(arr, 0, arr.length);
         return arr;
     }
+    public static void main(String[] args) {
+        final int CASE_SIZE = 100;
+        Integer[] arr = new Integer[CASE_SIZE];
+
+        for(int i = 0; i< CASE_SIZE; i++) {
+            arr[i] = new Integer(i);
+        }
+        sort(arr);
+        showArr(arr, "3split sort result");
+    }
 }
 
 /**
@@ -363,27 +369,34 @@ class QuickSort3Split extends SortTemplate {
  */
 class QuickSortNaive extends SortTemplate {
     private static void sortPart(Comparable[] arr, int lo, int hi) {
-        //sort part is [lo, hi)
+        //sort part is [lo, hi) hi is exclude
         Comparable v = null;
         int lt, gt;
         lt = lo + 1;
         gt = hi - 1;
-        if (hi - lo > 0) {
+        if (hi - lo >= 2) {
             v = arr[lo];
             while (true) {
-                while (lessThan(arr[lt], v) && lt < hi) lt++; // stop at element no less than v
-                while (!lessThan(arr[gt], v) && gt > lo) gt--; // stop at element less than v
+                while (lt < hi && lessThan(arr[lt], v)) lt++; // stop at element no less than v
+                while (gt > lo && !lessThan(arr[gt], v)) gt--; // stop at element less than v
                 if (lt >= gt) break;
                 exch(arr, lt, gt);
             }
             exch(arr, gt, lo);
+            sortPart(arr, lo, gt);
+            sortPart(arr, gt + 1, hi);
         }
-        sortPart(arr, lo, gt);
-        sortPart(arr, gt + 1, hi);
     }
     public static Comparable[] sort(Comparable[] arr) {
         sortPart(arr, 0, arr.length);
         return arr;
+    }
+
+    public static void main(String[] args) {
+        //Integer[] arr = {10, 9, 8, 7, 6, 5, 4, 3, 2, 1};
+        Integer[] arr = {10, 2};
+        sortPart(arr, 0, arr.length);
+        showArr(arr, "part result");
     }
 }
 
