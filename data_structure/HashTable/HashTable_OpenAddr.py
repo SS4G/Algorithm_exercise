@@ -1,24 +1,25 @@
-# coding=utf-8
-# Author: SS4G
-# Date 2017/03/30
-# all test case passed
-
+from AlgorithmTraining.data_structure.HashTable.SeprateLinkHash import HashNode
 import random
-class HashNode:
+class NextAddr:
     """
-    哈希链表的节点
+    产生下一个偏移地址的迭代器
     """
-    def __init__(self, keyword=None, val=None):
-        self.val = val
-        self.keyword = keyword
-        self.next = None
+    def __init__(self):
+        self.status = 0
+        self.query_status = 0
+        self.next_fun = lambda this_val: this_val**2
 
+    def get_next_offset(self):
+        self.status += 1  # self.next_fun(self.status)
+        return self.next_fun(self.status)
 
-class Hash_SepreateLink:
+    def get_next_query_offset(self):
+        self.query_status += 1  # self.next_fun(self.query_status)
+        return self.next_fun(self.query_status)
+
+class HashTable_OpenAddr:
     """
-    使用分离链接发构建的哈希表
-    调用构造函数返回的是哈希表对象
-    关于测试：测试用例的插入不包括相同的关键字插入多次
+    开放定址法的哈希表
     """
     def __init__(self, table_size=10, hash_function=None, lambda_val=None):
         """
@@ -30,7 +31,7 @@ class Hash_SepreateLink:
         self.table = self.create_hash_table(table_size=table_size)
         # 哈希值计算函数 两个参数一个是要哈希的关键字 另一个是哈希表的大小
         self.hash_fun = hash_function if hash_function is not None else self.hash_fun0
-        self.lambda_val = 0.5 if lambda_val is None else lambda_val
+        self.lambda_val = 0.4 if lambda_val is None else lambda_val
 
     def hash_fun0(self, keyword, table_size=10):
         """
@@ -40,6 +41,23 @@ class Hash_SepreateLink:
         暂时使用求余数运算 是一个可以替换的函数
         """
         return keyword % table_size
+
+    def find_next_empty_addr(self, this_addr):
+        """
+        计算下一个空的存放地址 用于插入操作
+        :param this_addr:
+        :param max_addr:
+        :param next_addr: 计算下一个可用理论地址的函数 可以为线性或者二次
+        :return: 计算出来的下一个可用地址
+        """
+        new_addr = this_addr
+        while self.table[this_addr] is not None:  # 这个地址被占用了
+            next_calc = NextAddr()
+            new_addr = this_addr+next_calc.get_next_offset()
+            new_addr = new_addr % self.table_size  # 如果获得新地址大于哈希表的实际大小
+            #  就通过求余函数回环
+            this_addr = new_addr
+        return new_addr
 
     def create_hash_table(self, table_size=10):
         """
@@ -60,8 +78,13 @@ class Hash_SepreateLink:
         hashed_key = self.hash_fun(keyword=keyword, table_size=self.table_size)
         tmp = HashNode(keyword=keyword, val=val)
         if self.table[hashed_key] is not None:
-            tmp.next = self.table[hashed_key]  # 将新的节点插入到链表的头部 最新插入的数据最可能被用到
-        self.table[hashed_key] = tmp
+            new_hashed_key = self.find_next_empty_addr(hashed_key) # 将新的节点插入到链表的头部 最新插入的数据最可能被用到
+            # print("A")
+        else:
+            new_hashed_key = hashed_key
+            # print("B")
+        # print("debug 0:", new_hashed_key)
+        self.table[new_hashed_key] = tmp
         self.hashed_size += 1
         if self.hashed_size/self.table_size > self.lambda_val:
             self.rehash()
@@ -75,10 +98,15 @@ class Hash_SepreateLink:
         hashed_key = self.hash_fun(keyword=keyword, table_size=self.table_size)
         if self.table[hashed_key] is not None:
             tmp = self.table[hashed_key]
-            while tmp.keyword != keyword and (tmp is not None):
-                tmp = tmp.next
+            query_offset_calc = NextAddr()
+            while (tmp is not None) and tmp.keyword != keyword:
+                hashed_key += query_offset_calc.get_next_query_offset()
+                tmp = self.table[hashed_key]
+            if tmp is None:
+                print(keyword)
             return None if tmp is None else tmp
-        else:
+        else:  # 直接就没有找到 直接就返回None
+            print(keyword)
             return None
 
     def rehash(self):
@@ -87,21 +115,23 @@ class Hash_SepreateLink:
         :return:
         """
         print("rehash invoked!", self.table_size)
-        new_hash_table = Hash_SepreateLink(table_size=2*self.table_size, hash_function=self.hash_fun)
+        new_hash_table = HashTable_OpenAddr(table_size=2*self.table_size, hash_function=self.hash_fun)
         for keyword_head in self.table:
             tmp = keyword_head
-            while tmp is not None:
+            if tmp is not None:
                 new_hash_table.insert(keyword=tmp.keyword,val=tmp.val)
-                tmp = tmp.next
         self.table = new_hash_table.table
         self.table_size = new_hash_table.table_size
         self.hashed_size = new_hash_table.hashed_size
 
-
-class HashTable_tb:
+class HashTable_tb2:
     "testbench"
+    def __init__(self):
+        self.testcase_max_value = 500000
+        self.testcase_max_length = 200000
+
     def gen_test_case(self):
-        keys = set([random.randint(0, 1999) for i in range(1, 1000)])
+        keys = set([random.randint(0, self.testcase_max_value) for i in range(1, self.testcase_max_length)])
         testcases = [None, ]*len(keys)
         i = 0
         src_char = "ABCDEFGHIJKMLNOPQRSTUVWXYZ"
@@ -113,14 +143,14 @@ class HashTable_tb:
         return testcases
 
     def save_testcase(self,testcases):
-        f = open("Hashtable_testcase.txt", "w", encoding="utf-8")
+        f = open("Hashtable_testcase2.txt", "w", encoding="utf-8")
         for case in testcases:
             f.write("\t".join((str(case[0]),case[1],"\n")))
         f.close()
 
     def load_testcase(self):
         testcases = []
-        f = open("Hashtable_testcase.txt", "r", encoding="utf-8")
+        f = open("Hashtable_testcase2.txt", "r", encoding="utf-8")
         for line in f:
             sp = line.strip().split("\t")
             testcases.append((int(sp[0]), sp[1]))
@@ -135,20 +165,19 @@ class HashTable_tb:
                 self.save_testcase(testcase0)
             elif operation == 2:
                 testcase1 = self.load_testcase()
-                s_hashtable = Hash_SepreateLink()
+                s_hashtable = HashTable_OpenAddr()
                 for case in testcase1:
                     s_hashtable.insert(keyword=case[0], val=case[1])
                 for case in testcase1:
                     # print(case)
                     assert  s_hashtable.query(keyword=case[0]).val == case[1], str(case[0])+":"+case[1]+":"+s_hashtable.query(keyword=case[0]).val
+                # 创建一些不存在的关键字的查找
+                for i in range(self.testcase_max_value+1, self.testcase_max_value+100):
+                    assert s_hashtable.query(keyword=i) is None, str("query error")
 # Test
 if __name__ == "__main__":
-    t = HashTable_tb()
+    t = HashTable_tb2()
     t.main_testbench()
-
-
-
-
 
 
 
