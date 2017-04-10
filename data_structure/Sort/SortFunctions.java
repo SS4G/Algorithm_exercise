@@ -272,7 +272,6 @@ class MergeSort extends SortTemplate {
     }
 
     public static Comparable[] sort(Comparable[] arr){
-        //$todo debugging merge sort
         int size = arr.length;
         int tmpSize = arr.length;
         boolean turnFlag = true;

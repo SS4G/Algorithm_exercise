@@ -5,8 +5,8 @@ package AlgorithmTraining.data_structure;
  */
 public class TempTest {
     public static void main(String[] args) {
-        int[] arr = null;
-        System.out.println("JJ" == "JJ");
+        char a = 's'+2;
+        System.out.println(a);
     }
 }
 
