@@ -13,7 +13,6 @@ class Solution {
             int state;
             final int FOUND_START = 0;
             final int FOUND_CHAR = 1;
-            final int FOUND_END = 2;
 
             state = FOUND_START;
 
@@ -34,43 +33,30 @@ class Solution {
                             state = FOUND_CHAR;
                         else if (!isWhiteSpace(sArr[index]) && index == sArr.length - 1) { //break loop directily
                             wordHi = index + 1;
-                            System.out.println("lo = "+wordLo+" hi = "+wordHi);
                             reverseNonSpaceWords(sArr, wordLo, wordHi);
-                            System.out.println(sArr);
                             break MAIN_LOOP;
                         }
                         else {
                             state = FOUND_START;
                             wordHi = index;
-                            System.out.println("lo = "+wordLo+" hi = "+wordHi);
                             reverseNonSpaceWords(sArr, wordLo, wordHi);
-                            System.out.println(sArr);
                         }
                         index ++;
                         break;
                  }
             }
-            for (char i : sArr) {
-                System.out.println(i);
-            }
-            return sArr.toString();
+            return new String(sArr);
         }
 
         public void reverseNonSpaceWords(char[] arr, int lo, int hi) {
             // hi exclude
             char tmp;
             int halfSize = (hi - lo) >>> 1;
-            for(int p = lo; p < hi; p++)
-                System.out.print(arr[p]);
-            System.out.println("-");
             for(int k = lo; k < lo + halfSize; k++) {
                 tmp = arr[k];
-                arr[k] = arr[hi - 1 - k];
-                arr[hi - 1 - k] = tmp;
+                arr[k] = arr[hi - 1 - k + lo];
+                arr[hi - 1 - k + lo] = tmp;
             }
-            for(int p = lo; p < hi; p++)
-                System.out.print(arr[p]);
-            System.out.println("-");
         }
 
         private boolean isWhiteSpace(char a) {
@@ -82,11 +68,9 @@ public class Leet557 {
     public static void main(String[] args) {
         Solution s = new Solution();
         char[] ar = "take abcd eeee".toCharArray();
-        s.reverseNonSpaceWords(ar,5,9);
-
-        /*String[] testcases = {"Let's take LeetCode contest"};//, "hello world!", "Hi Amy ", " Stop it! "};
+        String[] testcases = {"Let's take LeetCode contest", "hello world!", "Hi Amy ", " Stop it! "};
         for (String testcase : testcases) {
             System.out.println(s.reverseWords(testcase));
-        }*/
+        }
     }
 }
