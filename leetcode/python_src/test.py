@@ -1,2 +1,4 @@
-for i in range(10):
-    print(7**i)
+if 0:
+    print("sss")
+else:
+    print("sd")
