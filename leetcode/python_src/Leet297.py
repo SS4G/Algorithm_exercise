@@ -5,10 +5,8 @@ class TreeNode(object):
         self.left = None
         self.right = None
 
+
 class Codec:
-    """
-    using BFS
-    """
     def serialize(self, root):
         """Encodes a tree to a single string.
 
@@ -37,7 +35,7 @@ class Codec:
                 output.append("null")
             serializedPtr += 1
 
-        return ",".join(output)
+        return output
 
     def deserialize(self, data):
         """Decodes your encoded data to tree.
@@ -47,7 +45,8 @@ class Codec:
         """
         if len(data) == 0:
             return None
-        datas = [int(i) if i != "null" else None for i in data.split(",")]
+        datas = [int(i) if i != "null" else None for i in data]
+
         construct = []
         currentPtr = None
         LeftFlag = True
@@ -71,6 +70,10 @@ class Codec:
                 if leftFlag is True:
                     currentPtr += 1
         return construct[0]
+        # Your Codec object will be instantiated and called as such:
+        # codec = Codec()
+        # codec.deserialize(codec.serialize(root))
+
         # Your Codec object will be instantiated and called as such:
         # codec = Codec()
         # codec.deserialize(codec.serialize(root))
