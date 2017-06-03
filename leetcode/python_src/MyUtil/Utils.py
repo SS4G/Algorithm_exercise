@@ -58,17 +58,29 @@ class LinkedListUtil:
         return head
 
     @staticmethod
-    def link2Arr(head):
+    def link2Arr(head, length=-1):
         output = []
-        while head is not None:
-            output.append(head.val)
-            head = head.next
+        if length == -1:
+            while head is not None:
+                output.append(head.val)
+                head = head.next
+        else:
+            l = 0
+            while head is not None:
+                output.append(head.val)
+                l += 1
+                if l == length:
+                    break
+                head = head.next
         # print(output)
         return output
 
     @staticmethod
-    def showList(head):
-        print("->".join([str(int0) for int0 in LinkedListUtil.link2Arr(head)]))
+    def showList(head, length=-1):
+        if length == -1:
+            print("->".join([str(int0) for int0 in LinkedListUtil.link2Arr(head)]))
+        else:
+            print("->".join([str(int0) for int0 in LinkedListUtil.link2Arr(head, length=length)]))
 
     @staticmethod
     def genList(l):
@@ -127,8 +139,7 @@ class TreeNode(object):
 
 # build and show Tree
 class TreeUtil:
-    @staticmethod
-    def serialize(root):
+    def serialize(self, root):
         """Encodes a tree to a single string.
 
         :type root: TreeNode
@@ -140,26 +151,25 @@ class TreeUtil:
         stack = []
         output = []
         stack.append(root)
-        output.append(root.val)
+        output.append(str(root.val))
         serializedPtr = 0
         while serializedPtr < len(stack):
             if stack[serializedPtr].left is not None:
                 stack.append(stack[serializedPtr].left)
-                output.append(stack[serializedPtr].left.val)
+                output.append(str(stack[serializedPtr].left.val))
             else:
-                output.append(None)
+                output.append("null")
 
             if stack[serializedPtr].right is not None:
                 stack.append(stack[serializedPtr].right)
-                output.append(stack[serializedPtr].right.val)
+                output.append(str(stack[serializedPtr].right.val))
             else:
-                output.append(None)
+                output.append("null")
             serializedPtr += 1
 
         return output
 
-    @staticmethod
-    def deserialize(data):
+    def deserialize(self, data):
         """Decodes your encoded data to tree.
 
         :type data: str
@@ -167,7 +177,7 @@ class TreeUtil:
         """
         if len(data) == 0:
             return None
-        datas = [i if i is not None else None for i in data]
+        datas = [int(i) if i != "null" else None for i in data]
 
         construct = []
         currentPtr = None
@@ -192,15 +202,21 @@ class TreeUtil:
                 if leftFlag is True:
                     currentPtr += 1
         return construct[0]
+        # Your Codec object will be instantiated and called as such:
+        # codec = Codec()
+        # codec.deserialize(codec.serialize(root))
 
-    @staticmethod
-    def showTree(root, layer):
+        # Your Codec object will be instantiated and called as such:
+        # codec = Codec()
+        # codec.deserialize(codec.serialize(root))
+
+    def showTree(self, root, layer):
         if root is None:
             # print(" "*layer+"*")
             return
         print("...."*layer+str(root.val))
-        TreeUtil.showTree(root.left, layer+1)
-        TreeUtil.showTree(root.right, layer+1)
+        self.showTree(root.left, layer+1)
+        self.showTree(root.right, layer+1)
 
 if __name__ == "__main__":
     a0 = [1, 4, 5, 7, 8]
