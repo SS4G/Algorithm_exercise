@@ -3,6 +3,7 @@ package AlgorithmTraining.java_learn;
 /**
  * Created by g55 on 2017/6/1.
  */
+import javax.swing.plaf.synth.SynthEditorPaneUI;
 import java.util.*;
 class ListTest {
     public static void main(String[] args) {
@@ -30,43 +31,91 @@ class ListTest {
         for (String s : trueArrayList)
             System.out.println(s);
 
-        System.out.println("Show LinkedList sList1");
-        List<String> sList1 = new LinkedList<String>();
-        sList1.add("start");
-        sList1.addAll(fakeArrayList);
+        System.out.println("Show LinkedList linkList0");
+        List<String> linkList0 = new LinkedList<String>();
+        linkList0.add("start");
+        linkList0.addAll(fakeArrayList);
         //类似于Python extend的 作用
         //LinkedList 的底层实现是一个双链表 使用链表的插入和删除功能会很快
         //但是使用查找会沿着链表一直找下去会很慢 真正的库实现
         //是判断index在链表的前半部还是后半部 这样就可以
         //确定是从头开始查找还是从尾部开始向前查找
 
-        System.out.println(sList1);
-        sList1.remove(0);
+        System.out.println("befor remove element 0 "+linkList0);
+        linkList0.remove(0);
+        System.out.println("after remove element 0 "+linkList0);
 
-
-
+        //总结 asList产生的对象 只能保持原有数组的长度 不能进行增加， 删除等试图改变原有数组长度的操作
+        //ArrayList 的底层实现是 数组 所以查找高效 但是如果进行改变长度的 操作会导致创建新的数组
+        //并且发生内容的拷贝 导致效率降低
+        //LinkedList 的底层实现是双向链表，所以其 能够更好的实现插入和删除的操作 但是查找会变得较为麻烦 查找的复杂度为O(n)
     }
 }
 
-class StackTest {
 
+
+class StackTest {
+    class Stack<E> {
+        private LinkedList<E> storage = new LinkedList<E>();
+        public void push(E e) {storage.add(e);}
+        public E peek() {return storage.getFirst();}
+        public boolean isEmpty() {return storage.isEmpty();}
+        public E pop() {return storage.removeFirst();}
+        public 
+    }
+}
+
+class MapTest {
+    public static void main(String[] args) {
+        Map<String, Integer> treeMap0 = new TreeMap<String, Integer>();
+        Map<String, Integer> hashMap0 = new HashMap<String, Integer>();
+        String[] keys = {"ABC", "DEF", "GHI", "JKL"};
+        Integer[] vals = {5, 6, 7, 8};
+        for (int p = 0; p < keys.length; p++) {
+            treeMap0.put(keys[p], vals[p]);
+            hashMap0.put(keys[p], vals[p]);
+        }
+        System.out.println("treeMap0:"+treeMap0);
+        System.out.println("hashMap0:"+treeMap0);
+        System.out.println("get value of key DEF in treeMap:"+treeMap0.get("DEF"));
+        System.out.println("get value of key DEF in hashMap:"+hashMap0.get("DEF"));
+        treeMap0.put("DEF", treeMap0.get("DEF")+10); //需要修改原来的值 需要把原来的值先读取出来
+        hashMap0.put("DEF", hashMap0.get("DEF")+10);
+        System.out.println("new value of key DEF in treeMap:"+treeMap0.get("DEF"));
+        System.out.println("new value of key DEF in hashMap:"+hashMap0.get("DEF"));
+
+        //总结两种map的实现结构不一样所以他们的 也不一样
+        //TreeMap 底层实现是红黑树 其查找和修改的复杂度均为O(lgN)
+        //HashMap 的底层实现是哈希表 查找和修改的复杂度理想情况下都为O(1)
+        //但是会浪费一些空间 会随着元素的插入发生访问变慢的情况
+    }
 }
 
 class SetTest {
-
+    public static void main(String[] args) {
+        int[] elements = {1, 1, 9 ,8, 7, 1, 101, 11};
+        Set<Integer> hashSet0 = new HashSet<Integer>();
+        for (int i: elements)
+            System.out.println("add value to hashSet0:"+i+hashSet0.add(i)); //已经存在于set中的值 add函数会返回一个false
+        System.out.println("hashSet0:"+hashSet0);
+        Set<Integer> treeSet0 = new TreeSet<Integer>();
+        for (int i: elements)
+            System.out.println("add value to treeSet0:"+i+treeSet0.add(i)); //已经存在于set中的值 add函数会返回一个false
+        System.out.println("treeSet0:"+treeSet0); //可以看出TreeSet是排过序的 因为是 红黑树实现
+    }
 }
 
 class QueueTest {
+    public static void main(String[] args) {
 
+    }
 }
 
 class PiorityQueueTest {
 
 }
 
-class MapTest {
 
-}
 
 class IteratorTest {
     public static void main(String[] args) {
@@ -103,16 +152,6 @@ class MyIterator implements Iterable<String> {
     }
 }
 
-class StringTest {
-    public static void main(String[] args) {
-        String s1 = "ABC"; // s1 s2 这些常量是放在 常量区的
-        String s2 = "ABC";
-        String s3 = new String("ABC"); // s3 使用new创建的是分配在堆区的
-        System.out.println(s1 == s2); // true s1 s2 为常量被编译为 同一个常量对象
-        System.out.println(s1 == s3); // false s1 s3 不是同一个对象
-        System.out.println(s1.equals(s3)); // true s1 s3 使用String类重载的方法比较的是他们的内容
-    }
-}
 
 public class ContainerTest {
     public static void main(String[] args) {
