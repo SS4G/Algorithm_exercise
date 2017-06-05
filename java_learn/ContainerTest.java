@@ -3,7 +3,6 @@ package AlgorithmTraining.java_learn;
 /**
  * Created by g55 on 2017/6/1.
  */
-import javax.swing.plaf.synth.SynthEditorPaneUI;
 import java.util.*;
 class ListTest {
     public static void main(String[] args) {
@@ -52,16 +51,24 @@ class ListTest {
     }
 }
 
-
-
 class StackTest {
-    class Stack<E> {
+    private static class Stack<E> {
         private LinkedList<E> storage = new LinkedList<E>();
-        public void push(E e) {storage.add(e);}
+        public void push(E e) {storage.addFirst(e);}
         public E peek() {return storage.getFirst();}
         public boolean isEmpty() {return storage.isEmpty();}
         public E pop() {return storage.removeFirst();}
-        public 
+        public String toString() {return storage.toString();}
+    }
+    public static void main(String[] args) {
+        Stack<Integer> stack0 = new Stack<Integer>();
+        for (int i = 0; i < 5; i++)
+            stack0.push(i);
+        System.out.println(stack0);
+        System.out.println(stack0.pop());
+        System.out.println(stack0);
+        System.out.println(stack0.peek());
+        System.out.println(stack0);
     }
 }
 
@@ -77,12 +84,21 @@ class MapTest {
         }
         System.out.println("treeMap0:"+treeMap0);
         System.out.println("hashMap0:"+treeMap0);
+
         System.out.println("get value of key DEF in treeMap:"+treeMap0.get("DEF"));
         System.out.println("get value of key DEF in hashMap:"+hashMap0.get("DEF"));
+
         treeMap0.put("DEF", treeMap0.get("DEF")+10); //需要修改原来的值 需要把原来的值先读取出来
         hashMap0.put("DEF", hashMap0.get("DEF")+10);
+
         System.out.println("new value of key DEF in treeMap:"+treeMap0.get("DEF"));
         System.out.println("new value of key DEF in hashMap:"+hashMap0.get("DEF"));
+
+        System.out.println("treemap has key ABC? "+treeMap0.containsKey("ABC"));
+        System.out.println("hashmap has key ABC? "+hashMap0.containsKey("ABC"));
+
+        System.out.println("treemap has value ABC? "+treeMap0.containsValue(5));
+        System.out.println("hashmap has value ABC? "+hashMap0.containsValue(20));
 
         //总结两种map的实现结构不一样所以他们的 也不一样
         //TreeMap 底层实现是红黑树 其查找和修改的复杂度均为O(lgN)
@@ -107,15 +123,64 @@ class SetTest {
 
 class QueueTest {
     public static void main(String[] args) {
-
+        Queue<String> queue0 = new LinkedList<String>(); //queue 只是一个接口 具体的对象需要使用LinkedList
+        String[] vals = {"A", "B", "C", "D"};
+        for (String s: vals)
+            queue0.offer(s);
+        System.out.println(queue0);
+        System.out.println(queue0.peek()); // 输出A 但是不会删除 A
+        System.out.println(queue0.poll()); // 弹出A
+        System.out.println(queue0.poll()); // 弹出B
+        System.out.println(queue0.poll()); // 弹出C
+        System.out.println(queue0.poll()); // 弹出D
+        System.out.println(queue0.poll()); // 队列为空 返回null
+        System.out.println(queue0.poll()); // 队列为空 返回
     }
 }
 
 class PiorityQueueTest {
-
+    private static class MyElement implements Comparable<MyElement>{
+        int i;
+        String s;
+        MyElement(int i, String s) {
+            this.i = i;
+            this.s = s;
+        }
+        @Override
+        public int compareTo(MyElement o2) {
+            if (this.i > o2.i)
+                return -1;
+            else if (this.i == o2.i) {
+                if (this.s.charAt(0) > o2.s.charAt(0))
+                    return 1;
+                else if (this.s.charAt(0) > o2.s.charAt(0))
+                    return 0;
+                else
+                    return -1;
+            }
+            else
+                return 1;
+        }
+        @Override
+        public String toString() {
+            return this.i+":"+this.s;
+        }
+    }
+    public static void main(String[] args) {
+        PriorityQueue<MyElement> pq = new PriorityQueue<MyElement>();
+        String[] sList = {"AHJ", "KKSJ", "UUU", "sfds"};
+        int[] iList = {1, 2, 5, 4};
+        MyElement[] me = new MyElement[sList.length];
+        for (int i = 0; i < iList.length; i++)
+            me[i] = new MyElement(iList[i], sList[i]);
+        for (int i = 0; i < me.length; i++)
+            pq.offer(me[i]);
+        System.out.println(pq); //output: [5:UUU, 4:sfds, 2:KKSJ, 1:AHJ]
+        //可以看出 priority queue 是在插入时就已经进行了排序
+        for (int i = 0; i < me.length; i++)
+            System.out.println(pq.poll());
+    }
 }
-
-
 
 class IteratorTest {
     public static void main(String[] args) {
@@ -151,7 +216,6 @@ class MyIterator implements Iterable<String> {
         };
     }
 }
-
 
 public class ContainerTest {
     public static void main(String[] args) {
