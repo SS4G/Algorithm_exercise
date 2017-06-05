@@ -176,7 +176,7 @@ class PiorityQueueTest {
         for (int i = 0; i < me.length; i++)
             pq.offer(me[i]);
         System.out.println(pq); //output: [5:UUU, 4:sfds, 2:KKSJ, 1:AHJ]
-        //可以看出 priority queue 是在插入时就已经进行了排序
+        //可以看出 priority queue 是在插入时就已经进行了排序 排序的顺序与具体的comparable接口实现有关
         for (int i = 0; i < me.length; i++)
             System.out.println(pq.poll());
     }
@@ -220,5 +220,6 @@ class MyIterator implements Iterable<String> {
 public class ContainerTest {
     public static void main(String[] args) {
         System.out.println("Fin");
+        IteratorTest.main(null);
     }
 }
