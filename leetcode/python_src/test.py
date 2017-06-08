@@ -1,4 +1,7 @@
-if 0:
-    print("sss")
-else:
-    print("sd")
+a = set([])
+a.add(1)
+a.add(2)
+a.add(3)
+print(a)
+a.remove(2)
+print(a)

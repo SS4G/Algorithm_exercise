@@ -220,6 +220,9 @@ class TreeUtil:
         TreeUtil.showTree(root.left, layer+1)
         TreeUtil.showTree(root.right, layer+1)
 
+
+# write your code here
+
 if __name__ == "__main__":
     a0 = [1, 4, 5, 7, 8]
     a1 = [2, 4, 6, 8, 10]
@@ -229,3 +232,5 @@ if __name__ == "__main__":
     LinkedListUtil.showList(l1)
     l2 = LinkedListUtil.merge2Ascendinglist(l0, l1)
     LinkedListUtil.showList(l2)
+
+
