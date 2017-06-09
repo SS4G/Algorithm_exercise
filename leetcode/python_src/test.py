@@ -1,7 +1,1 @@
-a = set([])
-a.add(1)
-a.add(2)
-a.add(3)
-print(a)
-a.remove(2)
-print(a)
+print([1,2,3].find(3))
