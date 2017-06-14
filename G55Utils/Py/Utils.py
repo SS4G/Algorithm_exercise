@@ -1,4 +1,10 @@
-# Definition for singly-linked list.
+# these ar my wheels
+"""
+from AlgorithmTraining.G55Utils.Py.Utils import *
+import AlgorithmTraining.G55Utils.Py.Utils as G55_Utils_Py
+"""  # add this
+
+
 class ListNode(object):
     def __init__(self, x):
         self.val = x
@@ -139,7 +145,8 @@ class TreeNode(object):
 
 # build and show Tree
 class TreeUtil:
-    def serialize(self, root):
+    @staticmethod
+    def serialize(root):
         """Encodes a tree to a single string.
 
         :type root: TreeNode
@@ -151,25 +158,26 @@ class TreeUtil:
         stack = []
         output = []
         stack.append(root)
-        output.append(str(root.val))
+        output.append(root.val)
         serializedPtr = 0
         while serializedPtr < len(stack):
             if stack[serializedPtr].left is not None:
                 stack.append(stack[serializedPtr].left)
-                output.append(str(stack[serializedPtr].left.val))
+                output.append(stack[serializedPtr].left.val)
             else:
-                output.append("null")
+                output.append(None)
 
             if stack[serializedPtr].right is not None:
                 stack.append(stack[serializedPtr].right)
-                output.append(str(stack[serializedPtr].right.val))
+                output.append(stack[serializedPtr].right.val)
             else:
-                output.append("null")
+                output.append(None)
             serializedPtr += 1
 
         return output
 
-    def deserialize(self, data):
+    @staticmethod
+    def deserialize(data):
         """Decodes your encoded data to tree.
 
         :type data: str
@@ -177,7 +185,7 @@ class TreeUtil:
         """
         if len(data) == 0:
             return None
-        datas = [int(i) if i != "null" else None for i in data]
+        datas = [i if i is not None else None for i in data]
 
         construct = []
         currentPtr = None
@@ -202,21 +210,47 @@ class TreeUtil:
                 if leftFlag is True:
                     currentPtr += 1
         return construct[0]
-        # Your Codec object will be instantiated and called as such:
-        # codec = Codec()
-        # codec.deserialize(codec.serialize(root))
 
-        # Your Codec object will be instantiated and called as such:
-        # codec = Codec()
-        # codec.deserialize(codec.serialize(root))
-
-    def showTree(self, root, layer):
+    @staticmethod
+    def showTree(root, layer=0):
         if root is None:
             # print(" "*layer+"*")
             return
         print("...."*layer+str(root.val))
-        self.showTree(root.left, layer+1)
-        self.showTree(root.right, layer+1)
+        TreeUtil.showTree(root.left, layer+1)
+        TreeUtil.showTree(root.right, layer+1)
+
+    @staticmethod
+    def toPreOrder(root, output):
+        if root is None:
+            return
+        else:
+            output.append(root.val)
+            TreeUtil.toPreOrder(root.left, output)
+            TreeUtil.toPreOrder(root.right, output)
+            return output
+
+    @staticmethod
+    def toInOrder(root, output):
+        if root is None:
+            return
+        else:
+            TreeUtil.toInOrder(root.left, output)
+            output.append(root.val)
+            TreeUtil.toInOrder(root.right, output)
+            return output
+
+    @staticmethod
+    def toPostOrder(root, output):
+        if root is None:
+            return
+        else:
+            TreeUtil.toPostOrder(root.left, output)
+            TreeUtil.toPostOrder(root.right, output)
+            output.append(root.val)
+            return output
+
+# write your code here
 
 if __name__ == "__main__":
     a0 = [1, 4, 5, 7, 8]
@@ -227,3 +261,5 @@ if __name__ == "__main__":
     LinkedListUtil.showList(l1)
     l2 = LinkedListUtil.merge2Ascendinglist(l0, l1)
     LinkedListUtil.showList(l2)
+
+
