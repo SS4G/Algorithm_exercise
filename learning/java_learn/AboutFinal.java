@@ -1,4 +1,4 @@
-package AlgorithmTraining.java_learn;
+package AlgorithmTraining.learning.java_learn;
 
 /**
  * Created by g55 on 2017/6/2.
