@@ -1,7 +1,7 @@
-# Definition for singly-linked list.
+# these ar my wheels
 """
-from AlgorithmTraining.G55Utils.Py import *
-import AlgorithmTraining.G55Utils.Py as G55_Utils_Py
+from AlgorithmTraining.G55Utils.Py.Utils import *
+import AlgorithmTraining.G55Utils.Py.Utils as G55_Utils_Py
 """  # add this
 
 
@@ -212,13 +212,45 @@ class TreeUtil:
         return construct[0]
 
     @staticmethod
-    def showTree(root, layer):
+    def showTree(root, layer=0):
         if root is None:
             # print(" "*layer+"*")
             return
         print("...."*layer+str(root.val))
         TreeUtil.showTree(root.left, layer+1)
         TreeUtil.showTree(root.right, layer+1)
+
+    @staticmethod
+    def toPreOrder(root, output):
+        if root is None:
+            return
+        else:
+            output.append(root.val)
+            TreeUtil.toPreOrder(root.left, output)
+            TreeUtil.toPreOrder(root.right, output)
+            return output
+
+    @staticmethod
+    def toInOrder(root, output):
+        if root is None:
+            return
+        else:
+            TreeUtil.toInOrder(root.left, output)
+            output.append(root.val)
+            TreeUtil.toInOrder(root.right, output)
+            return output
+
+    @staticmethod
+    def toPostOrder(root, output):
+        if root is None:
+            return
+        else:
+            TreeUtil.toPostOrder(root.left, output)
+            TreeUtil.toPostOrder(root.right, output)
+            output.append(root.val)
+            return output
+
+# write your code here
 
 if __name__ == "__main__":
     a0 = [1, 4, 5, 7, 8]
@@ -229,3 +261,5 @@ if __name__ == "__main__":
     LinkedListUtil.showList(l1)
     l2 = LinkedListUtil.merge2Ascendinglist(l0, l1)
     LinkedListUtil.showList(l2)
+
+
