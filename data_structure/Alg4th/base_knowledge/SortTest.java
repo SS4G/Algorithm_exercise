@@ -1,9 +1,11 @@
 package AlgorithmTraining.data_structure.Alg4th.base_knowledge;
 
-import java.util.*;
 /**
+ *
  * Created by BUPT_SS4G on 2017/6/6.
  */
+
+
 class MySort {
     //Bubble sort
     public static int[] bubbleSort(int[] arr) {
@@ -91,13 +93,13 @@ class MySort {
 
     //Heap Sort
     public static int[] heapSort(int[] arr) {
+        //相当于一个选择复杂度为log(n)的选择排序 每次将堆顶的元素即最小的元素取出 然后随便将一个未排序的元素放在堆顶
+        //让堆重新恢复有序状态 堆顶的元素仍然是剩余元素中最小的
         heapify(arr);
         int[] res = new int[arr.length];
         for (int j = 0; j < res.length; j++) {
             res[j] = arr[0];
-            int newTop = arr[arr.length - 1 - j];
-            arr[arr.length - 1 - j] = Integer.MAX_VALUE;
-            insertToMinHeap(arr, newTop, 0);
+            insertToMinHeap(arr, Integer.MAX_VALUE, 0); //想象成 重的元素沉下去 轻的元素浮上来
         }
         return res;
     }
@@ -115,44 +117,70 @@ class MySort {
     }
 
     private static void insertToMinHeap(int[] heap, int val, int start) {
+        //将顶部元素删除 用要插入的值替代
         heap[start] = val;
         int ptr = start;
-        int tmpPtr = 0;
+        int tmpPtr;
+        int tmp;
         while (true) {
-            if (getLeftChild(ptr) < heap.length && getRightChild(ptr) < heap.length)
-                tmpPtr = heap[getLeftChild(ptr)] < heap[getLeftChild(ptr)] ? getLeftChild(ptr): getRightChild(ptr);
-            else if (getLeftChild(ptr) < heap.length)
-                tmpPtr = getLeftChild(ptr);
-            else
-                return ;
-            if (heap[ptr] < heap[tmpPtr]) {
-                int tmp = heap[ptr];
-                heap[ptr] = heap[tmpPtr];
-                heap[tmpPtr] = tmp;
-                ptr = tmpPtr;
+            int lPtr = getLeftChild(ptr);
+            int rPtr = getRightChild(ptr);
+            int minPtr;
+            if (lPtr < heap.length && rPtr < heap.length) {  //左右孩子均存在
+                if (heap[ptr] > heap[lPtr] || heap[ptr] > heap[rPtr]) {
+                    if (heap[ptr] > heap[lPtr] && heap[ptr] > heap[rPtr]) { //小于左右孩子
+                        minPtr = heap[lPtr] < heap[rPtr]? lPtr: rPtr;
+                    }
+                    else { //小于左右孩子之一
+                        if (heap[ptr] > heap[lPtr])
+                            minPtr = lPtr;
+                        else
+                            minPtr = rPtr;
+                    }
+                }
+                else //当前的节点最小 交换指针是他本身
+                    return ;
             }
-            else
-                return;
+            else if (lPtr < heap.length) { //只存在左孩子
+                if (heap[ptr] > heap[lPtr])
+                    minPtr = lPtr;
+                else
+                    return ;
+            }
+            else //没有孩子
+                return ;
+            tmp = heap[ptr];
+            heap[ptr] = heap[minPtr];
+            heap[minPtr] = tmp;
+            ptr = minPtr;
         }
     }
 
     private static void heapify(int[] heap) {
+        int[] copy = new int[heap.length];
         for (int i = 0; i < heap.length; i++) {
-            insertToMinHeap(heap, heap[heap.length - 1 - i],heap.length - 1 - i);
+            copy[i] = heap[i];
         }
+        for (int i = 0; i < heap.length; i++) {
+            heap[i] = Integer.MIN_VALUE;
+        }
+        for (int i = 0; i < heap.length; i++) {
+            insertToMinHeap(heap, copy[i], 0);
+        }
+        //showArr(heap, "heap");
     }
 
     //littel insert sort
-    public static int[] insertSort(int[] arr, int lo, int hi) {
+    private static int[] insertSort(int[] arr, int lo, int hi) {
         int i = lo;
-        while (i < hi ) {
+        while (i < hi) {
             int j = i - 1;
             int val = arr[i];
             while (j >= lo && val < arr[j]) {
-                arr[j+1] = arr[j];
+                arr[j + 1] = arr[j];
                 j -= 1;
             }
-            arr[j+1] = val;
+            arr[j + 1] = val;
             i += 1;
         }
         return arr;
@@ -164,49 +192,48 @@ class MySort {
         return arr;
     }
 
-    public static void mergeSortPart(int[] arr, int lo, int hi) {
+    private static void mergeSortPart(int[] arr, int lo, int hi) {
         // lo include
         // hi exclude
-        //System.out.println("lo = "+lo+" hi= "+hi);
-        if (hi - lo <= 5) {
+        if (hi - lo <= 2) { // 在区间较小是使用插入排序
             insertSort(arr, lo, hi);
             return ;
         }
-
-        int[] copy = new int[hi - lo];
         int mid = (hi + lo) >> 1;
-        int k0 = lo, k1 = mid, k2 = 0; // [lo~mid-1] [mid~hi-1]
         mergeSortPart(arr, lo, mid);
         mergeSortPart(arr, mid, hi);
+        mergeArray(arr, lo, mid, mid, hi);
+    }
 
-        while (k0 <= mid-1 && k1 <= hi-1) {
-            if (arr[k0] < arr[k1]) {
-                copy[k2] = arr[k0];
+    private static void mergeArray(int[] arr0, int l0, int h0, int l1, int h1) {
+        int[] copy = new int[h0 - l0 + h1 - l1];
+        int k0 = l0;
+        int k1 = l1;
+        int k2 = 0;
+        while (k0 < h0 && k1 < h1) {
+            if (arr0[k0] < arr0[k1]) {
+                copy[k2] = arr0[k0];
                 k0++;
             }
             else {
-                copy[k2] = arr[k1];
+                copy[k2] = arr0[k1];
                 k1++;
             }
             k2++;
         }
-        while (k0 <= mid - 1) {
-            copy[k2] = arr[k0];
+        while (k0 < h0) {
+            copy[k2] = arr0[k0];
             k2++;
             k0++;
         }
-        while (k1 <= hi - 1) {
-            copy[k2] = arr[k1];
-            k1++;
+        while (k1 < h1) {
+            copy[k2] = arr0[k1];
+            k2++;
             k1++;
         }
-        for (int k = 0; k < hi-lo; k++) { //write back
-            arr[lo+k] = copy[k];
+        for (int k = 0; k < copy.length; k++) { //write back
+            arr0[l0+k] = copy[k];
         }
-    }
-
-    private static int[] mergeArray(int[] arr1, int l1, int h1) {
-
     }
 
     //quick sort
@@ -215,27 +242,34 @@ class MySort {
         return res;
     }
 
-    public static int[] quickSort(int[] arr, int lo, int hi) {
+    private static int[] quickSort(int[] arr, int lo, int hi) {
         //lo include
         //hi exclude
-        if (hi - lo <= 5) {
+        if (hi - lo <= 3) {
             insertSort(arr, lo, hi);
+            return arr;
         }
+
         int key = arr[lo];
-        int lPtr = lo+1;
-        int hPtr = hi-1;
+        int lPtr = lo + 1 ;
+        int hPtr = hi - 1;
+        int tmp;
         while (lPtr <= hPtr) {
-            while (arr[lPtr] <= key)
+            while (lPtr < hi && arr[lPtr] <= key)
                 lPtr++;
-            while (arr[hPtr] > key)
+            while (hPtr > 0 && arr[hPtr] > key)
                 hPtr--;
-            int tmp = arr[lPtr];
+            if (lPtr > hPtr)
+                break;
+            tmp = arr[lPtr];
             arr[lPtr] = arr[hPtr];
             arr[hPtr] = tmp;
         }
-        int tmp = arr[hPtr];
+
+        tmp = arr[hPtr];
         arr[hPtr] = arr[lo];
         arr[lo] = tmp;
+        //showArr(arr, lo, hi, "key="+key);
         quickSort(arr, lo, hPtr);
         quickSort(arr, hPtr + 1, hi);
         return arr;
@@ -246,22 +280,23 @@ class MySort {
         return quickSort3Split(arr, 0, arr.length);
     }
 
-    public static int[] quickSort3Split(int[] arr, int lo, int hi) {
-        int lPtr = lo + 1;
+    private static int[] quickSort3Split(int[] arr, int lo, int hi) {
+        int lPtr = lo;
         int hPtr = hi - 1;
         int checkPtr = lo + 1;
-        int key = arr[lo];
         int tmp;
-        if (hi - lo < 5) {
+        if (hi - lo <= 3) {
             insertSort(arr, lo, hi);
+            return arr;
         }
-        while (checkPtr < hPtr) {
+        int key = arr[lo];
+        while (checkPtr <= hPtr) {
             if (arr[checkPtr] < key) {
                 tmp = arr[lPtr];
                 arr[lPtr] = arr[checkPtr];
                 arr[checkPtr] = tmp;
                 checkPtr++;
-                lPtr += 1;
+                lPtr++;
             }
             else if (arr[checkPtr] == key){
                 checkPtr++;
@@ -273,11 +308,9 @@ class MySort {
                 hPtr--;
             }
         }
-        tmp = arr[lPtr - 1];
-        arr[lPtr - 1] = key;
-        arr[lo] = tmp;
-        quickSort3Split(arr, lo, lPtr - 1);
-        quickSort3Split(arr, lPtr, hi);
+        arr[hPtr] = key;
+        quickSort3Split(arr, lo, hPtr);
+        quickSort3Split(arr, hPtr + 1, hi);
         return arr;
     }
 
@@ -287,7 +320,7 @@ class MySort {
         int[][] bucket1 = new int[10][1000];
         int[] lengthRec0 = new int[10];
         int[] lengthRec1 = new int[10];
-        //arguement check
+        //argument check
         for (int a: arr) {
             assert a >= 0: "invalid input:  args >= 0 is not meet!";
         }
@@ -308,9 +341,9 @@ class MySort {
             return arr;
         }
         else {
+
             for (int i = 1; i <= currentBit; i++) {
-                
-                if (i == 0) {
+                if (i == 1) {
                     for (int j = 0; j < 10; j++)
                         lengthRec0[j] = 0;
                     for (int b: arr) {
@@ -321,10 +354,12 @@ class MySort {
                     bucketFlag = !bucketFlag;
                 }
                 else {
-                    if (bucketFlag)
+                    if (bucketFlag) {
                         sortBybit(bucket1, bucket0, lengthRec1, lengthRec0, i);
-                    else
+                    }
+                    else {
                         sortBybit(bucket0, bucket1, lengthRec0, lengthRec1, i);
+                    }
                     bucketFlag = !bucketFlag;
                 }
             }
@@ -340,8 +375,9 @@ class MySort {
                 resultRec = lengthRec0;
             }
             int k = 0;
-            for (int y = 0; y < resultBucket.length; y++) {
-                for (int i = 0; i < resultRec[i]; i++) {
+
+            for (int y = 0; y < 10; y++) {
+                for (int i = 0; i < resultRec[y]; i++) {
                     result[k] = resultBucket[y][i];
                     k++;
                 }
@@ -354,19 +390,39 @@ class MySort {
         for (int j = 0; j < fullBUcket.length; j++) {
             for (int k = 0; k < fullRec[j]; k++) {
                 int bitValue = getBitValue(fullBUcket[j][k], bit);
-                emptyBucket[bitValue][emptyRec[bitValue]] = bitValue;
+                emptyBucket[bitValue][emptyRec[bitValue]] = fullBUcket[j][k];
                 emptyRec[bitValue]++;
             }
         }
         for (int j = 0; j < fullRec.length; j++) {
-            fullRec[j] = 0;
+            fullRec[j] = 0; // clear rec
         }
     }
+
     private static int getBitValue(int num, int bit) {
         assert bit >= 1: "arguement bit must > 1";
         int modVal = (int)Math.pow(10, bit);
         int divVal = (int)Math.pow(10, bit - 1);
         return (num % modVal) / divVal;
+    }
+
+    private static void showBucket(int[][] bucket, int[] bucketRec, String info) {
+        System.out.println(info);
+        for (int i = 0; i < 10; i++) {
+            System.out.print("bucket:"+i+" ");
+            for (int j = 0; j < bucketRec[i]; j++) {
+                System.out.print(bucket[i][j]+",");
+            }
+            System.out.println("");
+        }
+    }
+
+    private static void showArr(int[] arr, int lo, int hi, String info) {
+        System.out.println(info);
+        for (int a = lo; a < hi; a++) {
+            System.out.print(arr[a] + ",");
+        }
+        System.out.println("");
     }
 }
 
@@ -383,6 +439,7 @@ public class SortTest {
     }
     private static int[][] genTestCase() {
         int[][] testcases = {
+            {},
             {1, },
             {1, 2},
             {1, 2, 3},
@@ -390,7 +447,11 @@ public class SortTest {
             {1, 1, 1},
             {4, 1},
             {4, 3, 1},
+            {1, 4, 9, 10, 7, 2, 1, 2, 3, 4, 2},
+            {10, 9, 8, 7, 6, 5, 4, 3, 2, 1},
+            {1, 1, 3, 3, 5, 6, 7, 8, 7, 6, 9, 5, 4},
             {1, 4, 3, 5, 6, 7, 8, 10, 11, 9, 1, 0, 7, 4, 2, 3, 6, 6, 8, 20, 25 },
+            {134, 424, 312, 58, 623, 7, 908, 110, 11, 9, 31, 10, 27, 0, 23, 322, 6221, 623, 843, 2540, 32125},
         };
         return testcases;
     }
@@ -402,19 +463,13 @@ public class SortTest {
         System.out.println("");
     }
     public static void main(String[] args) {
-        int[][] cases = genTestCase();
-        for (int[] casex: cases) {
-            int[] res = MySort.mergeSort(casex);
-            showArr(res, "");
-            assert isSorted(res);
-        }
+        int[] casex = {134, 424, 312, 58, 623, 7, 908, 110, 11, 9, 31, 10, 27, 0, 23, 322, 6221, 623, 843, 2540, 32125};
 
+        String[] types = {"Bubble", "Insert", "Select", "Shell", "Heap", "Merge", "Quick", "Quick3", "Radix"};
 
-        /*String[] types = {"Bubble", "Insert", "Select", "Shell", "Heap", "Merge", "Quick", "Quick3", "Radix"};
         for (String type: types) {
             int[][] testcases = genTestCase();
             try {
-                int[] casex;
                 switch (type) {
                     case "Bubble":
                         System.out.println("bubble sorting");
@@ -485,6 +540,6 @@ public class SortTest {
             catch (AssertionError e) {
                 System.out.println("at sort type "+type);
             }
-        }*/
+        }
     }
 }
