@@ -1,13 +1,12 @@
 package AlgorithmTraining.data_structure.Alg4th.base_knowledge;
 
-import java.lang.reflect.Array;
-
+import java.util.*;
 /**
  * Created by BUPT_SS4G on 2017/6/6.
  */
 class MySort {
     //Bubble sort
-    public static int[] BubbleSort(int[] arr) {
+    public static int[] bubbleSort(int[] arr) {
         int tmp;
         for (int i = 0; i < arr.length; i++)
             for (int j = i; j < arr.length; j++) {
@@ -168,8 +167,10 @@ class MySort {
     public static void mergeSortPart(int[] arr, int lo, int hi) {
         // lo include
         // hi exclude
+        //System.out.println("lo = "+lo+" hi= "+hi);
         if (hi - lo <= 5) {
             insertSort(arr, lo, hi);
+            return ;
         }
 
         int[] copy = new int[hi - lo];
@@ -199,16 +200,21 @@ class MySort {
             k1++;
             k1++;
         }
-        for (int k = 0; k < hi-lo; k++) {
+        for (int k = 0; k < hi-lo; k++) { //write back
             arr[lo+k] = copy[k];
         }
     }
 
+    private static int[] mergeArray(int[] arr1, int l1, int h1) {
+
+    }
+
     //quick sort
     public static int[] quickSort(int[] arr) {
-        ;
-        return null;
+        int[] res = quickSort(arr, 0, arr.length);
+        return res;
     }
+
     public static int[] quickSort(int[] arr, int lo, int hi) {
         //lo include
         //hi exclude
@@ -218,7 +224,7 @@ class MySort {
         int key = arr[lo];
         int lPtr = lo+1;
         int hPtr = hi-1;
-        while (lPtr < hPtr) {
+        while (lPtr <= hPtr) {
             while (arr[lPtr] <= key)
                 lPtr++;
             while (arr[hPtr] > key)
@@ -227,25 +233,258 @@ class MySort {
             arr[lPtr] = arr[hPtr];
             arr[hPtr] = tmp;
         }
-        return null;
+        int tmp = arr[hPtr];
+        arr[hPtr] = arr[lo];
+        arr[lo] = tmp;
+        quickSort(arr, lo, hPtr);
+        quickSort(arr, hPtr + 1, hi);
+        return arr;
     }
 
     //quick sort 3split
-    public static int[] quickSort3Split() {
-        return null;
+    public static int[] quickSort3Split(int[] arr) {
+        return quickSort3Split(arr, 0, arr.length);
+    }
+
+    public static int[] quickSort3Split(int[] arr, int lo, int hi) {
+        int lPtr = lo + 1;
+        int hPtr = hi - 1;
+        int checkPtr = lo + 1;
+        int key = arr[lo];
+        int tmp;
+        if (hi - lo < 5) {
+            insertSort(arr, lo, hi);
+        }
+        while (checkPtr < hPtr) {
+            if (arr[checkPtr] < key) {
+                tmp = arr[lPtr];
+                arr[lPtr] = arr[checkPtr];
+                arr[checkPtr] = tmp;
+                checkPtr++;
+                lPtr += 1;
+            }
+            else if (arr[checkPtr] == key){
+                checkPtr++;
+            }
+            else {
+                tmp = arr[checkPtr];
+                arr[checkPtr] = arr[hPtr];
+                arr[hPtr] = tmp;
+                hPtr--;
+            }
+        }
+        tmp = arr[lPtr - 1];
+        arr[lPtr - 1] = key;
+        arr[lo] = tmp;
+        quickSort3Split(arr, lo, lPtr - 1);
+        quickSort3Split(arr, lPtr, hi);
+        return arr;
     }
 
     //radix sort
+    public static int[] radixSort(int[] arr) {
+        int[][] bucket0 = new int[10][1000];
+        int[][] bucket1 = new int[10][1000];
+        int[] lengthRec0 = new int[10];
+        int[] lengthRec1 = new int[10];
+        //arguement check
+        for (int a: arr) {
+            assert a >= 0: "invalid input:  args >= 0 is not meet!";
+        }
+        assert arr.length < 1000: "your input array is too long!";
 
+
+        boolean bucketFlag = true; // to use bucket0 if true else bucket1
+        int max = Integer.MIN_VALUE;
+        for (int a: arr) {
+            max = Math.max(a, max);
+        }
+        int currentBit = 0;
+        while (max > 0) {
+            max /= 10;
+            currentBit += 1;
+        }
+        if (currentBit == 0) {
+            return arr;
+        }
+        else {
+            for (int i = 1; i <= currentBit; i++) {
+                
+                if (i == 0) {
+                    for (int j = 0; j < 10; j++)
+                        lengthRec0[j] = 0;
+                    for (int b: arr) {
+                        int whichBucket = b % 10;
+                        bucket0[whichBucket][lengthRec0[whichBucket]] = b;
+                        lengthRec0[whichBucket]++;
+                    }
+                    bucketFlag = !bucketFlag;
+                }
+                else {
+                    if (bucketFlag)
+                        sortBybit(bucket1, bucket0, lengthRec1, lengthRec0, i);
+                    else
+                        sortBybit(bucket0, bucket1, lengthRec0, lengthRec1, i);
+                    bucketFlag = !bucketFlag;
+                }
+            }
+            int[] result = new int[arr.length];
+            int[][] resultBucket;
+            int[] resultRec;
+            if (bucketFlag) {
+                resultBucket = bucket1;
+                resultRec = lengthRec1;
+            }
+            else {
+                resultBucket = bucket0;
+                resultRec = lengthRec0;
+            }
+            int k = 0;
+            for (int y = 0; y < resultBucket.length; y++) {
+                for (int i = 0; i < resultRec[i]; i++) {
+                    result[k] = resultBucket[y][i];
+                    k++;
+                }
+            }
+            return result;
+        }
+    }
+
+    private static void sortBybit(int[][] fullBUcket, int[][] emptyBucket, int[] fullRec, int[] emptyRec, int bit) {
+        for (int j = 0; j < fullBUcket.length; j++) {
+            for (int k = 0; k < fullRec[j]; k++) {
+                int bitValue = getBitValue(fullBUcket[j][k], bit);
+                emptyBucket[bitValue][emptyRec[bitValue]] = bitValue;
+                emptyRec[bitValue]++;
+            }
+        }
+        for (int j = 0; j < fullRec.length; j++) {
+            fullRec[j] = 0;
+        }
+    }
+    private static int getBitValue(int num, int bit) {
+        assert bit >= 1: "arguement bit must > 1";
+        int modVal = (int)Math.pow(10, bit);
+        int divVal = (int)Math.pow(10, bit - 1);
+        return (num % modVal) / divVal;
+    }
 }
 
 public class SortTest {
-    private boolean isSorted(int[] arr) {
+    private static boolean isSorted(int[] arr) {
         //全部按自然序 排序 从小到大
+        if (arr.length <= 1)
+            return true;
         for (int i = 1; i < arr.length; i++) {
             if (arr[i] < arr[i - 1])
                 return false;
         }
         return true;
+    }
+    private static int[][] genTestCase() {
+        int[][] testcases = {
+            {1, },
+            {1, 2},
+            {1, 2, 3},
+            {1, 1},
+            {1, 1, 1},
+            {4, 1},
+            {4, 3, 1},
+            {1, 4, 3, 5, 6, 7, 8, 10, 11, 9, 1, 0, 7, 4, 2, 3, 6, 6, 8, 20, 25 },
+        };
+        return testcases;
+    }
+    private static void showArr(int[] arr, String info) {
+        System.out.println(info);
+        for (int a: arr) {
+            System.out.print(a+",");
+        }
+        System.out.println("");
+    }
+    public static void main(String[] args) {
+        int[][] cases = genTestCase();
+        for (int[] casex: cases) {
+            int[] res = MySort.mergeSort(casex);
+            showArr(res, "");
+            assert isSorted(res);
+        }
+
+
+        /*String[] types = {"Bubble", "Insert", "Select", "Shell", "Heap", "Merge", "Quick", "Quick3", "Radix"};
+        for (String type: types) {
+            int[][] testcases = genTestCase();
+            try {
+                int[] casex;
+                switch (type) {
+                    case "Bubble":
+                        System.out.println("bubble sorting");
+                        for (int[] case0: testcases) {
+                            int[] res = MySort.bubbleSort(case0);
+                            assert isSorted(res): "WA:";
+                        }
+                        break;
+                    case "Insert":
+                        System.out.println("insert sorting");
+                        for (int[] case0: testcases) {
+                            int[] res = MySort.insertSort(case0);
+                            assert isSorted(res): "WA:";
+                        }
+                        break;
+                    case "Select":
+                        System.out.println("select sorting");
+                        for (int[] case0: testcases) {
+                            int[] res = MySort.selectSort(case0);
+                            assert isSorted(res): "WA:";
+                        }
+                        break;
+                    case "Shell" :
+                        System.out.println("shell sorting");
+                        for (int[] case0: testcases) {
+                            int[] res = MySort.shellSort(case0);
+                            assert isSorted(res): "WA:";
+                        }
+                        break;
+                    case "Heap"  :
+                        System.out.println("heap sorting");
+                        for (int[] case0: testcases) {
+                            int[] res = MySort.heapSort(case0);
+                            assert isSorted(res): "WA:";
+                        }
+                        break;
+                    case "Merge" :
+                        System.out.println("merge sorting");
+                        for (int[] case0: testcases) {
+                            int[] res = MySort.mergeSort(case0);
+                            assert isSorted(res): "WA:";
+                        }
+                        break;
+                    case "Quick" :
+                        System.out.println("quick sorting");
+                        for (int[] case0: testcases) {
+                            int[] res = MySort.quickSort(case0);
+                            assert isSorted(res): "WA:";
+                        }
+                        break;
+                    case "Quick3":
+                        System.out.println("quick3 sorting");
+                        for (int[] case0: testcases) {
+                            int[] res = MySort.quickSort3Split(case0);
+                            assert isSorted(res): "WA:";
+                        }
+                        break;
+                    case "Radix" :
+                        System.out.println("radix sorting");
+                        for (int[] case0: testcases) {
+                            int[] res = MySort.radixSort(case0);
+                            assert isSorted(res): "WA:";
+                        }
+                        break;
+                    default:System.out.println(""); break;
+                }
+            }
+            catch (AssertionError e) {
+                System.out.println("at sort type "+type);
+            }
+        }*/
     }
 }
