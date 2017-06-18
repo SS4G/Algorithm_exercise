@@ -10,7 +10,6 @@ class ListNode(object):
         self.val = x
         self.next = None
 
-
 class LinkedListUtil:
     @staticmethod
     def merge2Ascendinglist(l1, l2):
