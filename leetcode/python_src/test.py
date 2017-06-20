@@ -1,1 +1,2 @@
-print([1,2,3].find(3))
+import random
+print(random.randint(0, 0))

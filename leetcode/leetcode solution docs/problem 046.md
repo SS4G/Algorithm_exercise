@@ -1,3 +1,29 @@
+## 46. Permutations
+DescriptionHintsSubmissionsSolutions
+Total Accepted: 163653
+Total Submissions: 383485
+Difficulty: Medium
+Contributor: LeetCode
+Given a collection of distinct numbers, return all possible permutations.
+
+For example,
+[1,2,3] have the following permutations:
+
+```
+[
+  [1,2,3],
+  [1,3,2],
+  [2,1,3],
+  [2,3,1],
+  [3,1,2],
+  [3,2,1]
+]
+```
+
+#### mycode
+一个简单的全排列 由于没有重复数字 不用考虑重复顺序相同的情况 用最简单的回溯法 结合一个标记数组来标记那些元素当前还是可用的 来完成这个任务 
+#### tips
+```
 class Solution(object):
     def permute(self, nums):
         """
@@ -34,3 +60,4 @@ if __name__ == "__main__":
     print(len(res))
     for j in res:
         print(j)
+```
