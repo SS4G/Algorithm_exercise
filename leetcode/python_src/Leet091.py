@@ -21,18 +21,18 @@ class Solution(object):
                     record[i] = 2 if 0 < int(s[i - 1: i + 1]) <= 26 else 1
             else:
                 if s[i] == '0':
-                    if 0 < int(s[i - 1: i + 1]) <= 26:
+                    if 0 < int(s[i - 1]) <= 2:
                         record[i] = record[i - 2]
                     else:
                         record[i] = 0
                 else:
                     thisAdd = record[i - 2] if s[i - 1] != '0' and 0 < int(s[i - 1: i + 1]) <= 26 else 0
                     record[i] = record[i - 1] + thisAdd
-        print(record)
+        #print(record)
         return record[len(s) - 1]
 
 if __name__ == "__main__":
     s = Solution()
     # s0 = "110320"
-    s0 = "03"
+    s0 = "3405"
     print(s.numDecodings(s0))
