@@ -1,8 +1,15 @@
+import collections
+
+
 class Solution(object):
-    def coinChange(self, coins, amount):
+    def findItinerary(self, tickets):
         """
-        :type coins: List[int]
-        :type amount: int
-        :rtype: int
+        :type tickets: List[List[str]]
+        :rtype: List[str]
         """
-        
+        startDict = collections.defaultdict(list)
+        endDict = collections.defaultdict(list)
+        for i in range(len(tickets)):
+            startDict[tickets[i][0]].append(i)
+            endDict[tickets[i][1]].append(i)
+

@@ -4,48 +4,18 @@ class Solution(object):
         :type nums: List[int]
         :rtype: void Do not return anything, modify nums in-place instead.
         """
-        nums.sort()
-        
-        k=0
-        l=-1
-        nums_copy=[None]*len(nums)
-        for i in range(len(nums_copy)):
-            if i%2 ==0:
-                nums_copy[i]=nums[k]
-                k+=1
-            else:
-                nums_copy[i]=nums[l]
-                l-=1      
-        nums[:]=nums_copy[:]
-        return 
-        
-    def find_first_same(self,dst_list):
-        return
-       
-        
-S2=Solution() 
-test_case=[1, 5, 1, 1, 6, 4]
-S2.wiggleSort(test_case)  
-print("result")
-print(test_case)
-print("------")
-test_case=[1, 3, 2, 2, 3, 1]
-S2.wiggleSort(test_case) 
-print("result")
-print(test_case)
-print("------") 
+        size = len(nums)
+        snums = sorted(nums)
+        for x in list(range(1, size, 2)) + list(range(0, size, 2)):
+            nums[x] = snums.pop()
+        return nums
 
 
-    
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
+
+if __name__ == "__main__":
+    s = Solution()
+    #a0 = [1, 5, 1, 1, 6, 2, 4]
+    a0 = [5, 4, 5, 6]
+    #a0 = [1,3,2,2,3,1]
+    s.wiggleSort(a0)
+    print(a0)

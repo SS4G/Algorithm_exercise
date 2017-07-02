@@ -29,7 +29,7 @@ There exist two distinct solutions to the 4-queens puzzle:
 具体参考博文  
 [N皇后问题详解](https://segmentfault.com/a/1190000003733325)
 #### mycode
-```Java
+```
 public class Solution {
     private static final int ROW = 0;
 	private static final int COLUMN = 1;
