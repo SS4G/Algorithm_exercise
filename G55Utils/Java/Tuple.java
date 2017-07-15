@@ -1,11 +1,10 @@
 package AlgorithmTraining.G55Utils.Java;
 
-import org.omg.Messaging.SYNC_WITH_TRANSPORT;
-
 import java.io.Serializable;
 
 /**
  * Created by BUPT_SS4G on 2017/6/5.
+ *
  */
 class AbstractTuple<A, B>  {
     protected final A a;
@@ -38,7 +37,7 @@ class ThreeTuple<A, B, C> extends Tuple<A, B> implements Serializable{
         this.c = c;
     }
     public String toString() {
-        return "("+this.a+","+this.b+","+this.c+")";
+        return "(" + this.a + "," + this.b + "," + this.c + ")";
     }
     public boolean equals(ThreeTuple<A, B, C> y) {
         return this.a.equals(y.a) && this.b.equals(y.b) && this.c.equals(y.c);
