@@ -19,7 +19,7 @@ A solution set is:
 和为0 可以分为 三种情况 ，三个0， 一正一负一个零 ， 两正一负，两负一正 可以先求出两个 然后去剩下的set中 查找 照的到就说明可以 在输出的时候可以用python的元组可以hash的特性 来保证每个结果的唯一性
 
 #### mycode
-```
+```Python
 class Solution(object):
 
     def threeSum(self, nums):

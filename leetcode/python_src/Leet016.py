@@ -29,4 +29,3 @@ if __name__ == "__main__":
     nums = [-1, 2, 1, -4]
     print(s.threeSumClosest(nums, 1))
 
-

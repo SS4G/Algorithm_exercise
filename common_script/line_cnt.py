@@ -1,8 +1,11 @@
 import os
+
+
 def get_all_file0(base_dir):
     file_list = []
     get_all_file(base_dir, file_list=file_list)
     return file_list
+
 
 def get_all_file(base_dir, file_list=None):
     this_folder = os.listdir(base_dir)
@@ -14,6 +17,7 @@ def get_all_file(base_dir, file_list=None):
         else:
             print("这是什么文件？？")
     return None
+
 
 def get_file_type(file_name):
     return file_name.split(".")[-1]
