@@ -10,7 +10,7 @@ public class ListNode {
     public int val = 0x80000000;
     public ListNode next = null;
     public ListNode pre = null;
-    ListNode(int val) {
+    ListNode(Integer val) {
         this.val = val;
     }
 }
