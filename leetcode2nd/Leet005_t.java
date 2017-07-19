@@ -38,6 +38,7 @@ class Leet005 {
         }
         return radius;
     }
+
     private String preProcess(String s) {
         StringBuilder sb = new StringBuilder(s.length() * 3);
         sb.append('#');
@@ -47,6 +48,7 @@ class Leet005 {
         }
         return sb.toString();
     }
+
     private String deProcess(String s) {
         StringBuilder sb = new StringBuilder(s.length());
         for (int i = 0; i < s.length(); i ++) {
@@ -54,36 +56,6 @@ class Leet005 {
                 sb.append(s.charAt(i));
         }
         return sb.toString();
-    }
-}
-
-class Leet005_2 {
-    public String longestPalindrome(String s) {
-        int[][] rec = new int[s.length()][s.length()];
-        for (int i = 0; i < s.length(); i ++) {
-            for (int j = i; j < s.length(); j ++) {
-                if (i == j) {
-                    rec[i][j] = 1;
-                }
-                else
-                    rec[i][j] = -1;
-            }
-        }
-    }
-
-    private int dpHelper(int[][] rec, String s, int begin, int end) {
-        // begin include end include
-        if (rec[begin][end] != -1)
-            return rec[begin][end];
-        else {
-            if (s.charAt(begin) != s.charAt(end)) {
-                rec[begin][end] = 0;
-                return 0;
-            }
-            else {
-                if (rec[begin - 1][end - 1] == -1)
-            }
-        }
     }
 }
 
