@@ -180,7 +180,7 @@ class TreeUtil:
     def deserialize(data):
         """Decodes your encoded data to tree.
 
-        :type data: str
+        :type data:
         :rtype: TreeNode
         """
         if len(data) == 0:
