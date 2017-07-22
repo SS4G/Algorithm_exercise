@@ -1,8 +1,8 @@
 package AlgorithmTraining.leetcode2nd;
 
-import java.util.ArrayList;
 
 /**
+ *
  * Created by 903 on 2017/7/19.
  */
 class Leet006 {
