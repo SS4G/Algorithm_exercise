@@ -1,4 +1,4 @@
-package AlgorithmTraining.java_learn;
+package AlgorithmTraining.learning.java_learn;
 
 /**
  * Created by BUPT_SS4G on 2017/6/5.
@@ -63,7 +63,7 @@ public class RttiTest {
         //所有类的各种信息都被保存在一个对应的Class 类对象中
         try {
             //使用字符获取对应类的Class对象的 引用, 这种方式在运行时检查 性能略差
-            Class<?> typeDog0 = Class.forName("AlgorithmTraining.java_learn.Dog0");//这里必须加上包名称才能够找得到
+            Class<?> typeDog0 = Class.forName("AlgorithmTraining.learning.java_learn.Dog0");//这里必须加上包名称才能够找得到
         }
         catch (ClassNotFoundException e) {
             System.out.println("class Dog0 not Found");
@@ -92,10 +92,25 @@ public class RttiTest {
         Dog dog_ = new Dog();
         Dog0 dog_0 = new Dog0();
         Dog1 dog_1 = new Dog1();
+        Dog dog_11 = new Dog1();
 
+
+        /**
+         * instanceof运算符用法
+         * 运算符是双目运算符,左面的操作元是一个对象,右面是一个类.当
+         * 左面的对象是右面的类创建的对象时,该运算符运算的结果是true,否则是false
+         *
+         * 说明:(1)一个类的实例包括本身的实例,以及所有直接或间接子类的实例
+         * (2)instanceof左边操作元显式声明的类型与右边操作元必须是同种类或右边是左边父类的继承关系,
+         * (3)不同的继承关系下,编译出错
+         */
         System.out.println(dog_0 instanceof Dog); // true
-        System.out.println(dog_0 instanceof Dog0); //
-        System.out.println(dog_0 instanceof Dog0); //
+        System.out.println(dog_0 instanceof Dog0); // true
+        System.out.println(dog_11 instanceof Dog0); // false dog11 虽然是一个 Dog引用 但是其实例是 Dog1
+        // 而不是Dog0 这就是RTTI的作用 真正的信息会一直被记录在类型对象中
+        //System.out.println(dog_0 instanceof Dog1); //
+        System.out.println("------");
+        /*所以 instanceof是编译期 instanceof可以表示继承关系 比Class.isInstance要灵活*/
         // Class<?> ClassObj.isInstance(obj) 比较是否是同一种类别 类似于Python的type
         System.out.println(typeDog1.isInstance(dog_)); // false 就算比较对象是该对象的超类也不可以
         System.out.println(typeDog1.isInstance(dog_0)); // false
