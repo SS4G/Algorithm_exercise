@@ -69,6 +69,12 @@ public class RttiTest {
             System.out.println("class Dog0 not Found");
         }
 
+        Object obj = new Dog();
+        Class<?> objType = obj.getClass();
+        System.out.println(objType.getName()); //输出仍然为Dog 说明类型信息始终保持在具体的对象中
+        //不管这个对象如何向上转型 他的具体类型内容都是不变的，可以理解为是堆中的对象始终是不变的。
+        //向上转型只是缩小了这个对象的可操作范围
+
         Class<Dog1> typeDog1 = Dog1.class;  //使用字面量在程序中直接指定.
         System.out.println(typeDog1.getName());
         System.out.println(typeDog1.getSimpleName());
@@ -104,7 +110,7 @@ public class RttiTest {
          * (2)instanceof左边操作元显式声明的类型与右边操作元必须是同种类或右边是左边父类的继承关系,
          * (3)不同的继承关系下,编译出错
          */
-        System.out.println(dog_0 instanceof Dog); // true
+        System.out.println(dog_0 instanceof Dog); // true  instanceof 可以表示这个对象是其基类的某个实例
         System.out.println(dog_0 instanceof Dog0); // true
         System.out.println(dog_11 instanceof Dog0); // false dog11 虽然是一个 Dog引用 但是其实例是 Dog1
         // 而不是Dog0 这就是RTTI的作用 真正的信息会一直被记录在类型对象中
