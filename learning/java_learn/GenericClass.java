@@ -47,7 +47,7 @@ public class GenericClass {
     public static void main(String[] args) {
         MyList<Integer> list = new MyList<>(Integer.class, 10);
         Integer[] arr = list.getList();
-        LinkedList<Integer>[] integerList = (LinkedList<Integer>)LinkedList[10];
+        //LinkedList<Integer>[] integerList = (LinkedList<Integer>)LinkedList[10];
 
     }
 }
