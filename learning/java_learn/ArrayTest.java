@@ -1,5 +1,6 @@
 package AlgorithmTraining.learning.java_learn;
 import java.util.Arrays;
+import java.util.LinkedHashMap;
 import java.util.Random;
 
 /**
@@ -52,7 +53,6 @@ public class ArrayTest {
         元素9在array1中的位置：Arrays.binarySearch(array1, 9)：
         -9
             */
-
     }
     private static void dispArray(Object[] arr) {
         for (Object o: arr) {
