@@ -1,7 +1,5 @@
 package AlgorithmTraining.data_structure.Alg4th.base_knowledge;
 
-import sun.security.ssl.SSLContextImpl;
-
 import java.util.*;
 
 
@@ -22,7 +20,7 @@ implements Iterable<T0> {
 
     private Node<T0> root;
 
-    void insertRoot(T0 val) {
+    void insert(T0 val) {
         if (root == null) {
             root = new Node<>(val);
         }
@@ -46,6 +44,9 @@ implements Iterable<T0> {
                     else {
                         cur = cur.right;
                     }
+                }
+                else {
+                    break;
                 }
             } while(true);
         }
@@ -72,59 +73,6 @@ implements Iterable<T0> {
             }
             else {
                 cur = cur.right;
-            }
-        }
-        return null;
-    }
-
-    public T0 remove(T0 val) {
-        return remove(val, root);
-    }
-
-    private T0 remove(T0 val, Node<T0> subRoot) {
-        Node<T0> cur = subRoot;
-        Node<T0> pre = subRoot;
-        while (cur != null) {
-            boolean isLeft = (pre.left == cur);
-            if (cur.val == val) {
-                if (cur.left == null && cur.right == null) {
-                    if (isLeft) {
-                        pre.left = null;
-                    }
-                    else {
-                        pre.right = null;
-                    }
-                }
-                else if (cur.left == null && cur.right != null) {
-                    if (isLeft) {
-                        pre.left = cur.right;
-                    }
-                    else {
-                        pre.right = cur.right;
-                    }
-                }
-                else if (cur.left != null && cur.right == null) {
-                    if (isLeft) {
-                        pre.left = cur.left;
-                    }
-                    else {
-                        pre.right = cur.left;
-                    }
-                }
-                else {
-                    Node<T0> maxNode = findMaxNode(cur.left);
-                    cur.val = maxNode.val;
-                    remove(cur.val, cur.left);
-                }
-                return val;
-            }
-            else if (cur.val.compareTo(val) < 0) {
-                pre = cur;
-                cur = cur.right;
-            }
-            else {
-                pre = cur;
-                cur = cur.left;
             }
         }
         return null;
@@ -163,10 +111,24 @@ implements Iterable<T0> {
 }
 
 public class MyBinarySearchTreeTest {
+    public static boolean isSorted(List<? extends Comparable> arr) {
+        for (int i = 0; i < arr.size() - 1; i++) {
+            if (arr.get(i).compareTo(arr.get(i + 1)) > 0)
+                return false;
+        }
+        return true;
+    }
     public static void main(String[] args) {
         MyBinarySearchTree<Integer> tree = new MyBinarySearchTree<>();
         Random r = new Random();
-        int size = r.nextInt(20);
-        for (int i = 0; i < )
+        int size = 100;
+        for (int i = 0; i < size; i++) {
+            tree.insert(r.nextInt(1000));
+        }
+        List<Integer> sorted = new ArrayList<>();
+        for (Integer i0: tree) {
+            sorted.add(i0);
+        }
+        assert isSorted(sorted): "WA";
     }
 }
