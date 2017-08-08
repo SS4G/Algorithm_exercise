@@ -4,8 +4,11 @@ import java.util.*;
 
 /**
  * Created by 903 on 2017/8/7.
-
+ * minHeap
+ * Author: g55
  */
+
+
 class MyMinHeap<T extends Comparable<T>> implements Iterable<T> {
     //index from 0
     private int size = 0;
@@ -32,6 +35,12 @@ class MyMinHeap<T extends Comparable<T>> implements Iterable<T> {
         return size;
     }
 
+    /**
+     *
+     * @param startIndex 进行堆化的起始点
+     * 这个函数只是保证从startIndex之后的点为顶点 是合法的最小堆
+     * 每次从一个顶点开始堆化的时候可能涉及到递归调用
+     */
     @SuppressWarnings("unchecked")
     private void heapifyRecursive(int startIndex) {
         int cur = startIndex;
@@ -73,7 +82,9 @@ class MyMinHeap<T extends Comparable<T>> implements Iterable<T> {
         stroage[j] = tmp;
     }
 
-    //index from 0
+    /**
+     该最小堆的其实索引是从0开始的
+     */
     private int getLeft(int index) {
         return  (index << 1) + 1;
     }
@@ -86,6 +97,11 @@ class MyMinHeap<T extends Comparable<T>> implements Iterable<T> {
         return (index & 0x00000001) == 0 ? (index >> 1) - 1 : index >> 1;
     }
 
+    /**
+     * 插入最小堆得方法是 插入到堆数组的最后一个 然后由下到上进行上浮操作
+     * 进行一次检测即可 复杂度O(lgn)
+     * @param val 要插入的元素
+     */
     @SuppressWarnings("unchecked")
     public void insertToHeap(T val) {
         //插入尾部 进行上浮
@@ -111,6 +127,12 @@ class MyMinHeap<T extends Comparable<T>> implements Iterable<T> {
         }
     }
 
+    /**
+     * 从顶部弹出元素时 先弹出最顶部的元素 然后用堆数组中最后的一个元素放到顶部
+     * 然后自顶向下的进行下沉操作 复杂度O(lgn)
+     * @return
+     * @throws Exception
+     */
     @SuppressWarnings("unchecked")
     public T removeFromTop() throws Exception {
         if (size <= 0)
