@@ -78,6 +78,69 @@ implements Iterable<T0> {
         return null;
     }
 
+    public void removeMin(Node<T0> root) {
+        if (root.left != null) {
+            Node<T0> cur = root;
+            while (cur.left.left != null) {
+                cur = cur.left;
+            }
+            cur.left = cur.left.right;
+        }
+    }
+
+    public void remove(T0 val) {
+        Node<T0> fakeRoot = new Node<T0>(null);
+        fakeRoot.left = root;
+        boolean isLeft = true;
+        Node<T0> lastNode = fakeRoot;
+        Node<T0> tobeRemove = root;
+
+        while (!tobeRemove.val.equals(val)) {
+            System.out.println("finding");
+            if (tobeRemove.val.compareTo(val) > 0) {
+                lastNode = tobeRemove;
+                isLeft = true;
+                tobeRemove = tobeRemove.left;
+            }
+            else if (tobeRemove.val.compareTo(val) < 0) {
+                lastNode = tobeRemove;
+                isLeft = false;
+                tobeRemove = tobeRemove.right;
+            }
+            else {
+                break;
+            }
+        } // find Node which is tobeRemoved
+
+        if (tobeRemove.left == null && tobeRemove.right == null) {
+            tobeRemove = null;
+        }
+        else if (tobeRemove.left == null || tobeRemove.right == null) {
+            tobeRemove = tobeRemove.left == null ? tobeRemove.right : tobeRemove.left;
+        }
+        else {
+            Node<T0> cur = tobeRemove.right; //findMin Node of right Tree
+            if (cur.left == null) {
+                tobeRemove.val = cur.val;
+                tobeRemove.right = cur.right;
+            }
+            else {
+                while (cur.left.left != null) {
+                    cur = cur.left;
+                }
+                tobeRemove.val = cur.left.val;
+                removeMin(tobeRemove.right);
+            }
+        }
+        if (isLeft) {
+            lastNode.left = tobeRemove;
+        }
+        else {
+            lastNode.right = tobeRemove;
+        }
+        root = fakeRoot.left;
+    }
+
     private void midTraverseRecursive(Node<T0> root, List<T0> output) {
         if (root != null) {
             midTraverseRecursive(root.left, output);
@@ -121,14 +184,20 @@ public class MyBinarySearchTreeTest {
     public static void main(String[] args) {
         MyBinarySearchTree<Integer> tree = new MyBinarySearchTree<>();
         Random r = new Random();
-        int size = 100;
-        for (int i = 0; i < size; i++) {
-            tree.insert(r.nextInt(1000));
+        int[] arr = {4, 2, 6, 1, 3, 5, 7};
+        for (int i: arr) {
+            tree.insert(i);
         }
-        List<Integer> sorted = new ArrayList<>();
-        for (Integer i0: tree) {
-            sorted.add(i0);
+        for (Integer k: tree) {
+            System.out.println(k);
         }
-        assert isSorted(sorted): "WA";
+        System.out.println("------");
+        //tree.remove(1);
+        //tree.remove(2);
+        //tree.remove(3);
+        tree.remove(4);
+        for (Integer k: tree) {
+            System.out.println(k);
+        }
     }
 }
