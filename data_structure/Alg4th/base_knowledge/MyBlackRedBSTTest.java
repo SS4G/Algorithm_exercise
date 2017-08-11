@@ -1,14 +1,20 @@
 package AlgorithmTraining.data_structure.Alg4th.base_knowledge;
 
-import jdk.nashorn.internal.runtime.regexp.joni.exception.ValueException;
-
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Random;
 
 /**
  * Created by BUPT_SS4G on 2017/8/10.
  *
+ */
+
+/**
+ * 关于左右旋转的问题 详见算法第四版280页 表示了2-节点 和3-节点 4-节点的转化状态图
+ * 主要是要理解红河书和理论上的2-3查找树是一种什么样的关系
+ * @param <K> 键
+ * @param <V> 值
  */
 
 class MyBlackRedBST<K extends Comparable<K>, V>
@@ -63,30 +69,29 @@ implements Iterable<K> {
         if (root == null) {
             return new Node<K, V>(key, value, true);
         }
-        Node<K, V> newRoot = null;
         boolean putSubTreeFlag = false;
         if (key.compareTo(root.key) > 0) {
             putSubTreeFlag = true;
-            root.left = put(root.right, key, value);
+            root.right = put(root.right, key, value);
         }
         else if (key.compareTo(root.key) < 0) {
             putSubTreeFlag = true;
-            root.right = put(root.left, key, value);
+            root.left = put(root.left, key, value);
         }
         else {
             root.value = value;
         }
+
         if (putSubTreeFlag) {
             if (!isRed(root.left) && isRed(root.right)) { //右红左黑
-                newRoot = rotateToLeft(root);
+                root = rotateToLeft(root);
             }
-            if (isRed(newRoot.left) && isRed(newRoot.left.left)) {
-                newRoot = rotateToRight(newRoot);
+            if (isRed(root.left) && isRed(root.left.left)) {
+                root = rotateToRight(root);
             }
-            if (isRed(newRoot.left) && isRed(newRoot.right)) {
-                flipColors(newRoot);
+            if (isRed(root.left) && isRed(root.right)) {
+                flipColors(root);
             }
-            return newRoot;
         }
         return root;
     }
@@ -96,8 +101,24 @@ implements Iterable<K> {
             headRoot = new Node<K, V>(key, value, false);
         }
         else {
-            put(headRoot, key, value);
+            headRoot = put(headRoot, key, value);
         }
+    }
+
+    public V get(K key) {
+        Node<K, V> cur = headRoot;
+        while (cur != null) {
+            if (cur.key.compareTo(key) > 0) {
+                cur = cur.left;
+            }
+            else if (cur.key.compareTo(key) < 0) {
+                cur = cur.right;
+            }
+            else {
+                return cur.value;
+            }
+        }
+        return null;
     }
 
     private void midTraverseRecursive(Node<K, V> root, List<K> output) {
@@ -112,6 +133,10 @@ implements Iterable<K> {
         ArrayList<K> res = new ArrayList<K>(1024);
         midTraverseRecursive(headRoot, res);
         return res;
+    }
+
+    public List<K> getKeys() {
+        return getElements();
     }
 
     public Iterator<K> iterator() {
@@ -134,6 +159,15 @@ implements Iterable<K> {
 
 public class MyBlackRedBSTTest {
     public static void main(String[] args) {
-
+        MyBlackRedBST<Integer, Character> bst = new MyBlackRedBST<>();
+        Random r = new Random();
+        String s = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+        for (int i = 0; i < 50; i++) {
+            bst.put(r.nextInt(100), s.charAt(i % 26));
+        }
+        System.out.println(bst.getKeys());
+        for (Integer i : bst.getKeys()) {
+            System.out.println(i + ":" + bst.get(i));
+        }
     }
 }
