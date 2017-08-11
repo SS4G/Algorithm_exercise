@@ -1,59 +1,65 @@
 package AlgorithmTraining.G55Utils.Java;
 
-import org.omg.Messaging.SYNC_WITH_TRANSPORT;
-
-import java.io.Serializable;
-
 /**
- * Created by BUPT_SS4G on 2017/6/5.
+ *
+ * Created by BUPT_SS4G on 2017/7/15.
  */
-class AbstractTuple<A, B>  {
-    protected final A a;
-    protected final B b;
-    protected AbstractTuple(A a, B b) {
-        this.a = a;
-        this.b = b;
-    }
-}
 
-class Tuple<A, B> extends AbstractTuple<A, B> implements Serializable{
-    public Tuple(A a, B b) {
-        super(a, b);
+public class Tuple implements Comparable<Tuple>{
+    public final Object[] items;
+    public final int length;
+    Tuple(Object ...items) {
+        this.items = items; // initliaze just once
+        this.length = items.length;
     }
-
     @Override
-    public String toString() {
-        return "("+this.a+","+this.b+")";
+    public int compareTo(Tuple otherTuple) {
+        int otherLength = otherTuple.length;
+        int i = -1;
+        int minLength = Math.min(otherLength, length);
+        do {
+            i++;
+            // todo should be checked by reflect
+        } while (i < minLength && 0 == ((Comparable)(otherTuple.items[i])).compareTo(items[i]));
+        if (i == minLength) { // exit loop above because of length
+            if (otherTuple.length > length)
+                return -1;
+            else if (otherTuple.length == length)
+                return 0;
+            else
+                return 1;
+        }
+        else { // exit loop above because of value
+            if (((Comparable)(otherTuple.items[i])).compareTo(items[i]) > 0)
+                return -1;
+            else
+                return 1;
+        }
     }
-
-    public boolean equals(Tuple<A, B> y) {
-        return this.a.equals(y.a) && this.b.equals(y.b);
+    
+    public boolean equals(Tuple t0) {
+        return this.compareTo(t0) == 0;
+    }
+    
+    // todo: add hashable method
+    
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append('(');
+        for (Object o: items) {
+            sb.append(o.toString());
+            sb.append(',');
+        }
+        sb.append(')');
+        return sb.toString();
     }
 }
-
-class ThreeTuple<A, B, C> extends Tuple<A, B> implements Serializable{
-    private final C c;
-    ThreeTuple(A a, B b, C c) {
-        super(a, b);
-        this.c = c;
-    }
-    public String toString() {
-        return "("+this.a+","+this.b+","+this.c+")";
-    }
-    public boolean equals(ThreeTuple<A, B, C> y) {
-        return this.a.equals(y.a) && this.b.equals(y.b) && this.c.equals(y.c);
-    }
-}
-
-class TupleTest{
+class Tuple_Test {
     public static void main(String[] args) {
-        Tuple<String, Integer> t0 = new Tuple<>("String0", 1);
-        Tuple<String, Integer> t1 = new Tuple<>("String1", 1);
-        System.out.println(t0.equals(t1));
-        ThreeTuple<String, Integer, Integer> tri0 = new ThreeTuple<>("A", 1, 1);
-        ThreeTuple<String, Integer, Integer> tri1 = new ThreeTuple<>("A", 1, 1);
-        System.out.println(tri0);
-        System.out.println(tri1);
-        System.out.println(tri0.equals(tri1));
+        Tuple t0 = new Tuple(1, 2, 3);
+        Tuple t1 = new Tuple(1, 2, 3, 5);
+        System.out.println(t0);
+        System.out.println(t1);
+        System.out.println(t0.compareTo(t1));
     }
 }

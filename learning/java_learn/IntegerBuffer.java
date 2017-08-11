@@ -1,4 +1,4 @@
-package AlgorithmTraining.java_learn;
+package AlgorithmTraining.learning.java_learn;
 
 import java.awt.*;
 
