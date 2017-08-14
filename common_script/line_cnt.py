@@ -27,7 +27,7 @@ if __name__ == "__main__":
     # 要计算的基础目录
     base_dir = "D:\work_space\Algorithm_practice_py\AlgorithmTraining"  # os.getcwd()
     # 要统计的文件扩展名（仅限于文本文件 二进制文件不行）
-    cnt_file_type = ["java", "py", "c", "cpp", ]
+    cnt_file_type = ["IOTest", "py", "c", "cpp", ]
     # extname_set = set([])
 
     print("statistic directory is :", base_dir)
