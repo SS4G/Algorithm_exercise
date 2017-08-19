@@ -100,6 +100,8 @@ public class IOTest {
     private static void copyTextFileAndAddMark(String srcFileName, String dstFileName) {
         try {
             //面向字符流的IO可以处理包括中文在内的unicode.
+            //bufferedReader 之类的带有缓冲的输入输出流 可以使得每次读写都发生真正的磁盘IO 这样可以大大的提高读写的效率
+            //带有缓冲的IO对象一般需要一个非缓冲的IO对象作为构造器的参数
             BufferedReader br = new BufferedReader(new FileReader(srcFileName));
             BufferedWriter bw = new BufferedWriter(new FileWriter(dstFileName));
             String x;
