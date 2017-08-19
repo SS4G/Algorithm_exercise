@@ -1,4 +1,4 @@
-package AlgorithmTraining.data_structure.Alg4th.base_knowledge;
+package AlgorithmTraining.data_structure.Alg4th.base_knowledge.BST;
 
 import java.util.*;
 
