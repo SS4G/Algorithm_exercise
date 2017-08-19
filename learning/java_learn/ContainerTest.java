@@ -104,6 +104,22 @@ class MapTest {
         //TreeMap 底层实现是红黑树 其查找和修改的复杂度均为O(lgN)
         //HashMap 的底层实现是哈希表 查找和修改的复杂度理想情况下都为O(1)
         //但是会浪费一些空间 会随着元素的插入发生访问变慢的情况
+        Map<String, Integer> treeMap1 = new TreeMap<String, Integer>();
+        Map<String, Integer> hashMap1 = new HashMap<String, Integer>();
+
+        treeMap1.put("C", 3);
+        treeMap1.put("E", 5);
+        treeMap1.put("A", 1);
+        treeMap1.put("D", 4);
+        treeMap1.put("B", 2);
+        hashMap1.put("C", 3);
+        hashMap1.put("E", 5);
+        hashMap1.put("A", 1);
+        hashMap1.put("D", 4);
+        hashMap1.put("B", 2);
+
+        System.out.println(treeMap1.keySet());
+        System.out.println(hashMap1.keySet());
     }
 }
 
