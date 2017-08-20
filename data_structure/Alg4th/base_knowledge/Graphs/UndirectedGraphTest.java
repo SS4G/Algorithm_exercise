@@ -10,11 +10,13 @@ import java.util.*;
  */
 
 class UndirectedGraph {
-    private HashMap<Integer, List<Integer>> storage;
+    //private HashMap<Integer, List<Integer>> storage;
+    HashMap<Integer, List<Integer>> storage;
     private int nodeAmount;
     UndirectedGraph(List<List<Integer>> values) {
         storage = new HashMap<>();
         for (List<Integer> pair : values) {
+            //System.out.println(pair);
             addEdge(pair.get(0), pair.get(1));
         }
         nodeAmount = storage.size();
@@ -29,19 +31,21 @@ class UndirectedGraph {
     }
     
     public void addEdge(int v0, int v1) { //无向图中添加边是双向的
-        if (storage.containsKey(v0)) {
-            storage.get(v0).add(v1);
-        }
-        else {
+        //System.out.println(v0 + ":" + v1);
+        //storage.get(v1);
+        if (!storage.containsKey(v0)) {
             storage.put(v0, new ArrayList<Integer>());
         }
+        storage.get(v0).add(v1);
 
-        if (storage.containsKey(v1)) {
-            storage.get(v1).add(v0);
-        }
-        else {
+
+        if (!storage.containsKey(v1)) {
             storage.put(v1, new ArrayList<Integer>());
         }
+        storage.get(v1).add(v0);
+
+        //System.out.println("v0:" + v0 + ":" + storage.get(v0));
+        //System.out.println("v1:" + v1 + ":" + storage.get(v1));
     }
 
     public Set<Integer> getNodeValues() {
@@ -65,6 +69,8 @@ class UndirectedGraphUtil {
         output.add(curValue);
         checked.add(curValue);
         List<Integer> adjance = graph.getAdj(curValue);
+        //System.out.println(adjance);
+        //System.out.println(graph.storage.get(0));
         for (Integer value : adjance) {
             if (!checked.contains(value)) {
                 dfsHelper(graph, output, checked, value);
@@ -95,17 +101,27 @@ class UndirectedGraphUtil {
     }
 
     public boolean hasLoop(UndirectedGraph graph) {
-
+        Set<Integer> checked = new HashSet<>();
+        if (graph.getNodeAmount() > 0) {
+            return dfsLoopFinder(graph, checked, 0, 0);
+        }
+        else
+            return false;
     }
 
-    private boolean dfsLoopFinder(UndirectedGraph graph, Set<Integer> checked, int curValue) {
+    private boolean dfsLoopFinder(UndirectedGraph graph, Set<Integer> checked, int curValue, int lastValue) {
         List<Integer> adjance = graph.getAdj(curValue);
+        checked.add(curValue);
         boolean res = false;
         for (Integer value : adjance) {
             if (!checked.contains(value)) {
-                res = (res || dfsLoopFinder(graph, checked, value));
-                if (res)
+                res = (res || dfsLoopFinder(graph, checked, value, curValue));
+                if (res) {
                     return true;
+                }
+            }
+            else if (value == lastValue) {//和上一个点相邻 不算是有环 在无向图中是都如此
+                continue;
             }
             else {
                 return true;
@@ -116,7 +132,7 @@ class UndirectedGraphUtil {
 }
 
 public class UndirectedGraphTest {
-    private List<List<Integer>> readGraphData(String dataFilePath) {
+    private static List<List<Integer>> readGraphData(String dataFilePath) {
         File f = new File(dataFilePath);
         List<List<Integer>> datas = new ArrayList<>();
         try {
@@ -125,7 +141,9 @@ public class UndirectedGraphTest {
             String line;
             while ((line = br.readLine()) != null) {
                 if (line.length() > 1) {
-                    String[] number = line.split("\\s*");
+                    //System.out.println(line);
+                    //line = line.trim();
+                    String[] number = line.split("\\s+");
                     int a0 = Integer.parseInt(number[0]);
                     int a1 = Integer.parseInt(number[1]);
                     ArrayList<Integer> arr = new ArrayList<>(2);
@@ -145,7 +163,23 @@ public class UndirectedGraphTest {
     }
 
     public static void main(String[] args) {
+        String baseDir = "D:\\work_space\\Algorithm_training_java\\src\\AlgorithmTraining\\data_structure\\Alg4th\\base_knowledge\\Graphs\\";
+        String UndirectedGraphWithLoopPath = baseDir + "undirectedGraphWithLoop";
+        String UndirectedGraphWithoutLoopPath = baseDir + "undirectedGraphWithoutLoop";
 
+        List<List<Integer>> graphDataWithLoop = readGraphData(UndirectedGraphWithLoopPath);
+        List<List<Integer>> graphDataWithoutLoop = readGraphData(UndirectedGraphWithoutLoopPath);
+
+        UndirectedGraph graphWithLoop = new UndirectedGraph(graphDataWithLoop);
+        UndirectedGraph graphWithoutLoop = new UndirectedGraph(graphDataWithoutLoop);
+
+        UndirectedGraphUtil utl = new UndirectedGraphUtil();
+
+        System.out.println("with loop:" + utl.dfs(graphWithLoop));
+        System.out.println("without Loop" + utl.dfs(graphWithoutLoop));
+
+        assert utl.hasLoop(graphWithLoop): "WA";
+        assert !utl.hasLoop(graphWithoutLoop): "WA";
     }
 }
 
