@@ -1,4 +1,4 @@
-package AlgorithmTraining.data_structure.Sort;
+package AlgorithmTraining.data_structure.Base_Knowledge.Sort;
 
 /**
  *

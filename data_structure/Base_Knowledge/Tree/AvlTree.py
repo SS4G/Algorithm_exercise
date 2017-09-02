@@ -1,5 +1,5 @@
 
-from AlgorithmTraining.data_structure.Tree.BinarySearchTree import BinarySearchTree, bstNode
+from AlgorithmTraining.data_structure.Base_Knowledge.Tree.BinarySearchTree import BinarySearchTree, bstNode
 import random
 
 

@@ -1,4 +1,4 @@
-from AlgorithmTraining.data_structure.HashTable.SeprateLinkHash import HashNode
+from AlgorithmTraining.data_structure.Base_Knowledge.HashTable.SeprateLinkHash import HashNode
 import random
 class NextAddr:
     """
