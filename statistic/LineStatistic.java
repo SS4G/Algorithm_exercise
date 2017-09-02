@@ -4,7 +4,6 @@ package AlgorithmTraining.statistic;
  * Created by BUPT_SS4G on 2017/8/19.
  */
 
-import com.sun.deploy.util.StringUtils;
 
 import java.io.*;
 import java.util.*;
@@ -88,7 +87,7 @@ class LineStatisticUtil {
 }
 
 public class LineStatistic {
-    private static String targetDir = "D:\\work_space\\Algorithm_training_java\\src\\AlgorithmTraining\\";
+    private static String targetDir = "D:\\workSpace\\alg_java\\src\\AlgorithmTraining\\";
     private static String[] fileTypes = {"cpp", "py", "c", "java",};
     public static void main(String[] args) {
         HashMap<String, Integer> res = LineStatisticUtil.getRootStatistic(targetDir, fileTypes);

@@ -7,6 +7,7 @@ import java.util.*;
  *
  */
 public class DirectedGraph extends AbstractGraph implements Graph {
+    protected Set<Edge> edges = new HashSet<>();
     DirectedGraph() {
 
     }

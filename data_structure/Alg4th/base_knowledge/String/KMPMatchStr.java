@@ -1,4 +1,4 @@
-package AlgorithmTraining.data_structure.Alg4th.base_knowledge.StringTest;
+package AlgorithmTraining.data_structure.Alg4th.base_knowledge.String;
 
 /**
  * Created by mi on 17-4-1.
