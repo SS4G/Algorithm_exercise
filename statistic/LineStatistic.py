@@ -25,7 +25,7 @@ def get_file_type(file_name):
 if __name__ == "__main__":
     # arguments
     # 要计算的基础目录
-    base_dir = "D:\work_space\Algorithm_training_java\src\AlgorithmTraining"  # os.getcwd()
+    base_dir = "D:\\workSpace\\alg_py\\AlgorithmTraining"  # os.getcwd()
     # 要统计的文件扩展名（仅限于文本文件 二进制文件不行）
     cnt_file_type = ["java", "py", "c", "cpp", ]
     # extname_set = set([])
