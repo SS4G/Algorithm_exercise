@@ -2,5 +2,4 @@
 *.o
 *.exe
 *.class
-leetcode/c_src/[0-9]+
 __pycache__/
