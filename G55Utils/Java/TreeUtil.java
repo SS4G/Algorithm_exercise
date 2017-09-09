@@ -43,6 +43,12 @@ public class TreeUtil {
         return intArr;
     }
 
+    @SuppressWarnings("unchecked")
+    public static TreeNode deserialize(Integer[] arr) {
+        List<Integer> li = Arrays.asList(arr);
+        return deserialize(li);
+    }
+
     public static TreeNode deserialize(List<Integer> arr) {
         if (arr.get(0) == null)
             return null;

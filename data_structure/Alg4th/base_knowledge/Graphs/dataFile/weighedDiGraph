@@ -1,5 +1,6 @@
 # column = 3
 # without negWeigh
+# for dijkstra
 4   5   35
 5   4   35
 4   7   37

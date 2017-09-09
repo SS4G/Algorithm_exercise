@@ -35,6 +35,6 @@ class Edge implements Comparable<Edge> { //v->w
     }
 
     public String toString() {
-        return "[" + v + "<->" + w + "]"; //双向边
+        return "[" + v + "->" + w + ":" + weight + "]"; //双向边
     }
 }
