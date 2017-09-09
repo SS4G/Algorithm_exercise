@@ -5,6 +5,7 @@ import org.omg.Messaging.SYNC_WITH_TRANSPORT;
 
 /**
  * Created by szh-920 on 17-9-9.
+ *
  */
 
 class Solution024 {
@@ -17,6 +18,9 @@ class Solution024 {
         //end exclude
         if (end - start <= 1)
             return true;
+        if (end - start == 2) {
+            return arr[end - 1] > arr[start];
+        }
         int midPos = findPos(arr, arr[end - 1], start, end - 1); // mid Pos is next midValue position
         if (midPos != -1) {
             return validRecure(arr, start, midPos) && validRecure(arr, midPos + 1, end - 1);
@@ -28,20 +32,16 @@ class Solution024 {
     private int findPos(int[] arr, int midVal, int start, int end) {
         int lo = start;
         int hi = end - 1;
-        System.out.println(start+":"+end +"-"+midVal);
+        //System.out.println(start+":"+end +"-"+midVal);
         while (lo < end && arr[lo] < midVal) {
             lo++;
         }
 
-        if (lo >= end)
-            return -1;
+
 
         while (hi >= start && arr[hi] > midVal) {
             hi--;
         }
-
-        if (hi < start)
-            return -1;
 
         if (lo > hi) {
             return hi;
@@ -57,8 +57,8 @@ public class No024 {
     public static void main(String[] args) {
         Solution024 s = new Solution024();
         int[] arr = {1, 10, 2, 6, 8, 7, 5};
-        //arr = new int[]{4, 6, 7, 5};
         arr = new int[]{4, 6, 7, 5};
+        arr = new int[]{1, 2, 3, 4, 5};
         System.out.println(s.VerifySquenceOfBST(arr));
     }
 }
