@@ -81,7 +81,7 @@ class IndexPqTest {
     public static void main(String[] args) {
         IndexPriorityQueue<String> ipq = new IndexPriorityQueue<>();
         for (int i = 0; i < 10; i++) {
-            
+
         }
     }
 }
