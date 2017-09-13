@@ -10,6 +10,8 @@ import org.omg.Messaging.SYNC_WITH_TRANSPORT;
 
 class Solution024 {
     public boolean VerifySquenceOfBST(int [] sequence) {
+        if (sequence.length <= 0)
+            return false;
         return validRecure(sequence, 0, sequence.length);
     }
 
@@ -18,15 +20,17 @@ class Solution024 {
         //end exclude
         if (end - start <= 1)
             return true;
-        if (end - start == 2) {
-            return arr[end - 1] > arr[start];
-        }
         int midPos = findPos(arr, arr[end - 1], start, end - 1); // mid Pos is next midValue position
-        if (midPos != -1) {
+        if (midPos >= 0) {
             return validRecure(arr, start, midPos) && validRecure(arr, midPos + 1, end - 1);
         }
-        else
+        else if (midPos == -1) {
+            //System.out.println("--");
+            return validRecure(arr, start, end - 1);
+        }
+        else {
             return false;
+        }
     }
 
     private int findPos(int[] arr, int midVal, int start, int end) {
@@ -37,8 +41,6 @@ class Solution024 {
             lo++;
         }
 
-
-
         while (hi >= start && arr[hi] > midVal) {
             hi--;
         }
@@ -47,8 +49,8 @@ class Solution024 {
             return hi;
         }
         else {
-            System.out.println(start+":"+end);
-            return -1;
+            //System.out.println(start+":"+end);
+            return -2;
         }
     }
 }
@@ -57,8 +59,9 @@ public class No024 {
     public static void main(String[] args) {
         Solution024 s = new Solution024();
         int[] arr = {1, 10, 2, 6, 8, 7, 5};
-        arr = new int[]{4, 6, 7, 5};
-        arr = new int[]{1, 2, 3, 4, 5};
+        //arr = new int[]{4, 6, 7, 5};
+        //arr = new int[]{1, 2, 3, 4, 5};
+        //arr = new int[]{5,4,3,2,1};
         System.out.println(s.VerifySquenceOfBST(arr));
     }
 }
