@@ -78,6 +78,21 @@ public class TreeUtil {
         return rootPtr;
     }
 
+    public static void showTree(TreeNode root) {
+        showTreeRecuresive(root, "");
+    }
+
+    private static void showTreeRecuresive(TreeNode root, String levelPrefix) {
+        if (root == null) {
+            System.out.println(levelPrefix + ":null");
+        }
+        else {
+            System.out.println(levelPrefix + ":" + root.val);
+            showTreeRecuresive(root.left, levelPrefix + "----");
+            showTreeRecuresive(root.right, levelPrefix + "----");
+        }
+    }
+
     public static void main(String[] args) {
         TreeNode n0 = new TreeNode(0);
         TreeNode n1 = new TreeNode(1);
