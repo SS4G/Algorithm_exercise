@@ -127,6 +127,9 @@ class IndexPqTest {
         //ipq.delMin();
         /*
         for (int i = 0; i < 10; i++) {
+<<<<<<< HEAD
+
+=======
             //System.out.println(10 - i);
             try {
                 ipq.insert(10 - 1 - i + 1000, 10 - 1 - i + 1000);
@@ -141,6 +144,7 @@ class IndexPqTest {
             if (k % 2 == 0) {
                 ipq.change(k + 1000, 2 * k + 1000);
             }
+>>>>>>> 1f1d711cbf438a561dcaaf4e321ae182ec0f0bb3
         }
         while (!ipq.isEmpty()) {
             //System.out.println(ipq.minElement());
