@@ -214,7 +214,7 @@ class TreeUtil:
     @staticmethod
     def showTree(root, layer=0):
         if root is None:
-            # print(" "*layer+"*")
+            #print("...."*layer+"*")
             return
         print("...."*layer+str(root.val))
         TreeUtil.showTree(root.left, layer+1)
