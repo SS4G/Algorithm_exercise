@@ -6,6 +6,8 @@ import java.util.*;
  */
 public class LinkedListUtil {
     public static ListNode generateLinkedList(int[] arr) {
+        if (arr == null)
+            return null;
         ListNode dummyRoot = new ListNode(-1);  // dummy node
         ListNode tmp = dummyRoot;
         for (int i: arr) {
