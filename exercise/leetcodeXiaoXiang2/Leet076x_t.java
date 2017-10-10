@@ -7,24 +7,47 @@ import java.util.*;
 class Leet076x {
     public String minWindow(String s, String t) {
         Map<Character, Integer> charCnt = new HashMap<>();
-        for (char c : t.toCharArray()) {
+        for (char c : t.toCharArray()) {//build dict
             if (!charCnt.containsKey(c))
                 charCnt.put(c, 0);
             charCnt.put(c, charCnt.get(c) + 1);
         }
         String minWindow = "";
         int minWindowLen = Integer.MAX_VALUE;
-        int bg = 0;
+        int bg = 1;
         int ed = 0;
+
         //ed <= bg
-        while (ed <= bg || bg < s.length()) {
+        char c = s.charAt(0);
+        if (charCnt.containsKey(c)) {
+            charCnt.put(c, charCnt.get(c) - 1);
+        }
+
+        while (ed < s.length()) {
             if (satisfy(charCnt)) {
-                charCnt.put(s.charAt(ed), charCnt.get(s.charAt(bg)) + 1);
+                //System.out.println(ed + ":" + bg);
+                if (bg - ed < minWindowLen) {
+                    minWindow = s.substring(ed, bg);
+                    minWindowLen = minWindow.length();
+                }
+
+                c = s.charAt(ed);
+                if (charCnt.containsKey(c)) {
+                    charCnt.put(c, charCnt.get(c) + 1); //ed inc
+                }
+                ed++;
             }
             else {
-                charCnt.put(s.charAt(bg), charCnt.get(s.charAt(bg)) + 1);
+                if (bg >= s.length())
+                    break;
+                c = s.charAt(bg);
+                if (charCnt.containsKey(c)) {
+                    charCnt.put(c, charCnt.get(c) - 1);
+                }
+                bg++;
             }
         }
+        return minWindow;
     }
 
     private boolean satisfy(Map<Character, Integer> charCnt) {
@@ -38,6 +61,11 @@ class Leet076x {
 
 public class Leet076x_t {
     public static void main(String[] args) {
-
+        String s = "ADOBECODEBANC";
+        String t = "ABC";
+        s = "cabwefgewcwaefgcf";
+        t = "cae";
+        Leet076x leet = new Leet076x();
+        System.out.println(leet.minWindow(s, t));
     }
 }
