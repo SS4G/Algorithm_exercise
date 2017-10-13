@@ -17,6 +17,14 @@ public class LinkedListUtil {
         return dummyRoot.next;
     }
 
+    public static ListNode generateLinkedList(Integer[] arr) {
+        int[] arr0 = new int[arr.length];
+        for (int i = 0; i < arr.length; i++) {
+            arr0[i] = arr[i];
+        }
+        return generateLinkedList(arr0);
+    }
+
     public static ListNode generateLinkedList(List<Integer> arr) {
         ListNode dummyRoot = new ListNode(-1);  // dummy node
         ListNode tmp = dummyRoot;
