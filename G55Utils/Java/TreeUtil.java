@@ -10,6 +10,8 @@ import java.util.List;
  */
 
 public class TreeUtil {
+    public static final int NULL_VAL = Integer.MIN_VALUE;
+
     public static ArrayList<TreeNode> serialize(TreeNode root) {
         ArrayList<TreeNode> serializeFifo = new ArrayList<>(10000);
         serializeFifo.add(root);
@@ -47,6 +49,20 @@ public class TreeUtil {
     public static TreeNode deserialize(Integer[] arr) {
         List<Integer> li = Arrays.asList(arr);
         return deserialize(li);
+    }
+
+    public static TreeNode deserialize(int[] arr) {
+        System.out.println("Integer.MIN_VALUE represent null node");
+        Integer[] arr0 = new Integer[arr.length];
+        for (int i = 0; i < arr.length; i++) {
+            if (arr[i] == Integer.MIN_VALUE) {
+                arr0[i] = null;
+            }
+            else {
+                arr0[i] = arr[i];
+            }
+        }
+        return deserialize(arr0);
     }
 
     public static TreeNode deserialize(List<Integer> arr) {
