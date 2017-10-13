@@ -36,6 +36,11 @@ public class LinkedListUtil {
         System.out.println("None");
     }
 
+    public static void showList(ListNode head, String info) {
+        System.out.println(info);
+        showList(head);
+    }
+
     public static int size(ListNode head) {
         int cnt = 0;
         ListNode ptr = head;
