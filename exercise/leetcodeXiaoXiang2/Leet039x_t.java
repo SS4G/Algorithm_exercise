@@ -25,10 +25,10 @@ class Leet039x {
                     lastSumSet = combineRecure(partResRecord, target - cand, candidates);
                     //System.out.println(lastSumSet);
                     if (lastSumSet.size() > 0) {
-                        //System.out.println("ss");
+                        //System.out.println("tmpfile");
                         for (List<Integer> i : lastSumSet) {
                             if (i.get(i.size() - 1) <= cand) { //保证只有从小到大的一种排列
-                                //System.out.println("ss");
+                                //System.out.println("tmpfile");
                                 oneResult = new ArrayList<>(i);
                                 oneResult.add(cand);
                                 tmpSumSet.add(oneResult);

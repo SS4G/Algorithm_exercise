@@ -41,7 +41,7 @@ class Leet092x {
             nextPtr = nextPtr.next;
         }
         for (int i = 0; i < m - 1; i++) {
-            //System.out.println("ss");
+            //System.out.println("tmpfile");
             nextPtr = nextPtr.next;
             prePtr = prePtr.next;
         }

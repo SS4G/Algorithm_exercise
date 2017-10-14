@@ -36,7 +36,7 @@ class Leet126x {
                 for (char c : charSet) {
                     tmpArr[i] = c;
                     String ss = new String(tmpArr);
-                    //System.out.println(ss);
+                    //System.out.println(tmpfile);
                     int newDist = wordMap.get(curWord) + 1;
                     if (wordMap.containsKey(ss)) {
                         if (newDist < wordMap.get(ss)) {

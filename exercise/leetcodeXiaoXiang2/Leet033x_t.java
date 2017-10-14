@@ -7,7 +7,7 @@ class Leet033x {
     public int search(int[] nums, int target) {
         int breakPoint = searchBreakPoint(nums);
         if (breakPoint == -1) {
-            //System.out.println("ss");
+            //System.out.println("tmpfile");
             return binSearch(nums, 0, nums.length, target);
         }
         else {

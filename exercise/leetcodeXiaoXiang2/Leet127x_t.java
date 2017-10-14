@@ -37,12 +37,12 @@ class Leet127x {
                     tmpArr[i] = c;
                     String ss = new String(tmpArr);
                     if (wordMap.containsKey(ss) && wordMap.get(ss) == Integer.MAX_VALUE) {
-                        //System.out.println(ss);
+                        //System.out.println(tmpfile);
                         wordMap.put(ss, wordMap.get(curWord) + 1);
                         /*
-                        if (!lastWord.containsKey(ss))
-                            lastWord.put(ss, new ArrayList<>());
-                        lastWord.get(ss).add(curWord);*/
+                        if (!lastWord.containsKey(tmpfile))
+                            lastWord.put(tmpfile, new ArrayList<>());
+                        lastWord.get(tmpfile).add(curWord);*/
                         sFifo.add(ss);
                         wr++;
                     }
