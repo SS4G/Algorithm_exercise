@@ -41,7 +41,7 @@ class Leet134x {
 }
 
 public class Leet134x_t {
-    public static void main() {
+    public static void main(String[] args) {
         Leet134x leet = new Leet134x();
 
     }
