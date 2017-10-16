@@ -7,6 +7,7 @@
 33,1,
 34,1,
 39,1,
+42,0  ----rainWaterII   KO
 46,1,
 51,1,
 53,1,
@@ -65,5 +66,4 @@
 502,0, ----IPO greedy
 538,1,
 547,1,
-42,0  ----rainWaterII   KO
 percentage,27%,
