@@ -25,4 +25,10 @@ public class ArrayUtil {
         sb.append(']');
         System.out.println(sb);
     }
+
+    public static void showArr2D(int[][] arr) {
+        for (int[] arr0 : arr) {
+            showArr(arr0);
+        }
+    }
 }

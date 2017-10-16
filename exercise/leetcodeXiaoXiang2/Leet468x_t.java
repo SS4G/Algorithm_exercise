@@ -24,13 +24,19 @@ class Leet468x {
         charSet.add('F');
     }
     public String validIPAddress(String IP) {
+        int cnt = 0;
+        for (char c : IP.toCharArray())
+            cnt += c == ':' ? 1 : 0;
+        if (cnt != 7)
+            return "Neither";
+
         if (IP.contains(":")) {
             String[] parts = IP.split(":");
             //System.out.println("ii");
 
-            if (parts.length != 6)
+            if (parts.length != 8)
                 return "Neither";
-            System.out.println("ii");
+            //System.out.println("ii");
             for (String s : parts) {
                 if (s.length() == 0)
                     return "Neither";
@@ -40,11 +46,16 @@ class Leet468x {
             return "IPv6";
         }
         else if (IP.contains(".")) {
+            for (char c : IP.toCharArray())
+                cnt += c == '.' ? 1 : 0;
+            if (cnt != 3)
+                return "Neither";
+
             //System.out.println("A");
             String[] parts = IP.split("\\.");
             //System.out.println(parts.length);
             if (parts.length != 4) {
-                System.out.println("ss");
+                //System.out.println("ss");
                 return "Neither";
             }
             for (String s : parts) {
@@ -90,7 +101,9 @@ public class Leet468x_t {
         //assert leet.validIPAddress("172.16.254.1").equals("IPv4");
         //assert leet.validIPAddress("172.16.254.01").equals("Neither");
         //assert leet.validIPAddress("172.16.257.1").equals("Neither");
-        assert leet.validIPAddress("2001:0db8:85a3:0000:0000:8a2e:0370:7334").equals("IPv6");
+        //System.out.println("2001:0db8:85a3:0:0:8A2E:0370:7334:".split(":").length);
+        //assert leet.validIPAddress("2001:0db8:85a3:0000:0000:8a2e:0370:7334").equals("IPv6");
+        assert leet.validIPAddress("2001:0db8:85a3:0:0:8A2E:0370:7334:").equals("Neither");
         //assert leet.validIPAddress("2001:db8:85a3:0:0:8A2E:0370:7334").equals("IPv6");
         //assert leet.validIPAddress("2001:0db8:85a3::8A2E:0370:7334").equals("Neither");
         //assert leet.validIPAddress("02001:0db8:85a3:0000:0000:8a2e:0370:7334").equals("Neither");
