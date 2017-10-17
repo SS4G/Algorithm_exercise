@@ -111,6 +111,7 @@ public class Leet417x_t {
                 {6, 7, 1, 4, 5},
                 {5, 1, 1, 2, 4},
         };
+        map = new int[][] {{1,3,3,1,3,2},{3,2,1,3,2,3},{3,3,3,2,3,1}};
         Leet417x leet = new Leet417x();
         List<int[]> result = leet.pacificAtlantic(map);
         for (int[] res : result) {
