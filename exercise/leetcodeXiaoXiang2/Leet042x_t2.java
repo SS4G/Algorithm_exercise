@@ -10,44 +10,54 @@ class Leet042x2{
         if (height.length < 2)
             return 0;
 
-        int leftPtr = 1;
+        int leftPtr = 0;
         int lastLeftLevelPtr = 0;
         int lastLeftLevel = height[0];
+        int leftCounted = 0;
 
-        int rightPtr = height.length - 2;
+        int rightPtr = height.length - 1;
         int lastRightLevelPtr = height.length - 1;
         int lastRightLevel = height[height.length - 1];
+        int rightCounted = height.length - 1;
 
-        while (leftPtr < rightPtr) {
-            while (leftPtr < height.length && height[leftPtr] < lastLeftLevel) {
+        while (leftPtr < height.length) {
+            while (leftPtr < height.length && height[leftPtr] <= lastLeftLevel) {
+                if (height[leftPtr] == lastLeftLevel) {
+                    area += calcAreaInterval(height, lastLeftLevel, lastLeftLevelPtr, leftPtr);
+                    leftCounted = leftPtr;
+                    lastLeftLevelPtr = leftPtr;
+                }
                 leftPtr++;
             }
 
-            System.out.println("leftPtr:" + lastLeftLevelPtr + ":" + leftPtr);
-            area += calcAreaInterval(height, lastLeftLevel, lastLeftLevelPtr, leftPtr);
-
-            if (leftPtr < height.length - 1) {
+            if (leftPtr < height.length) {
+                area += calcAreaInterval(height, lastLeftLevel, lastLeftLevelPtr, leftPtr);
+                leftCounted = leftPtr;
                 lastLeftLevel = height[leftPtr];
                 lastLeftLevelPtr = leftPtr;
-                leftPtr++;
             }
+            //System.out.println("leftPtr:" + lastLeftLevelPtr + ":" + leftPtr + ":" + leftCounted);
+        }
 
-            if (leftPtr >= rightPtr)
-                break;
-
-            while (rightPtr >= 0 && height[rightPtr] < lastRightLevel) {
+        while (rightCounted > leftCounted && rightPtr >= 0) {
+            while (rightPtr >= 0 && height[rightPtr] <= lastRightLevel) {
+                if (height[rightPtr] == lastLeftLevel) {
+                    area += calcAreaInterval(height, lastRightLevel, rightPtr, lastRightLevelPtr);
+                    rightCounted = rightPtr;
+                    lastRightLevelPtr = rightPtr;
+                }
+                //System.out.println("JJ");
                 rightPtr--;
             }
-
-            System.out.println("rightPtr:" + lastRightLevelPtr + ":" + rightPtr);
-            area += calcAreaInterval(height, lastRightLevel, rightPtr, lastRightLevelPtr);
-
-            if (rightPtr > 0) {
+            //System.out.println("rightPtr:" + lastRightLevelPtr + ":" + rightPtr + ":" + rightCounted);
+            if (rightPtr >= 0) {
+                area += calcAreaInterval(height, lastRightLevel, rightPtr, lastRightLevelPtr);
+                rightCounted = rightPtr;
                 lastRightLevel = height[rightPtr];
                 lastRightLevelPtr = rightPtr;
-                rightPtr--;
             }
         }
+
         return area;
     }
 
@@ -64,9 +74,12 @@ public class Leet042x_t2 {
     public static void main(String[] args) {
         Leet042x2 leet = new Leet042x2();
         int[] arr = {0, 1, 1, 1, 0, 0, 0, 1, 1, 0, 1, 0, 1, 0};
-        arr = new int[]{2, 0, 2};
-        //               0  1   2   3   4   5   6   7   8   9   10  11
+        arr = new int[]{1, 2, 3, 2, 1, 3, 2, 1, 3, 2, 1, 3, 2, 1};
+        //              0  1  2  3  4  5  6  7  8  9  10 11 12 13
         //System.out.println(leet.getSegment(arr, 1));
+        arr = new int[]{2, 0, 2};
+        //arr = new int[]{4, 9, 4, 5, 3, 2};
+        //arr = new int[]{4, 2, 3};
         System.out.println(leet.trap(arr));
     }
 }
