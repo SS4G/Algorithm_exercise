@@ -31,10 +31,10 @@ class Leet407 {
                 break;
             int newLevel = pq.poll();
             int delta = newLevel - curHeight;
-            wholeArea += delta * getSegment(height, newLevel);
+            //wholeArea += delta * getSegment(height, newLevel);
             curHeight = newLevel;
         }
-        return wholeArea;
+        return 0;
     }
     //       bit 0:is soil bit 1: flowed by side water
     public int[][] genSection(int[][] heightMap, int height) {
@@ -58,7 +58,8 @@ class Leet407 {
             bfsHelper(section, XL - 1, y, XL, YL, AIR); //AIR是与周边相同的位置
         }
 
-        for ()
+        //for ()
+        return 0;
     }
 
     public void bfsHelper(int[][] matMark, int x, int y, int XL, int YL, int markVal) {
