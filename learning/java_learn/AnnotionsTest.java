@@ -15,14 +15,14 @@ import java.lang.reflect.*;
 @Retention(RetentionPolicy.RUNTIME)
 @interface Test { //如何去定义一个注解
     public int id() default -1; //给注解定义一个   默认的值
-    public String name() default "ss";
+    public String name() default "tmpfile";
 }
 
 @Target(ElementType.METHOD)// 指明注解的对象
 @Retention(RetentionPolicy.RUNTIME)
 @interface Test2 { //如何去定义一个注解
     public int id() default -1; //给注解定义一个   默认的值
-    public String name() default "ss";
+    public String name() default "tmpfile";
 }
 
 class TmpClass {

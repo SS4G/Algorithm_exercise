@@ -6,6 +6,8 @@ import java.util.*;
  */
 public class LinkedListUtil {
     public static ListNode generateLinkedList(int[] arr) {
+        if (arr == null)
+            return null;
         ListNode dummyRoot = new ListNode(-1);  // dummy node
         ListNode tmp = dummyRoot;
         for (int i: arr) {
@@ -13,6 +15,14 @@ public class LinkedListUtil {
             tmp = tmp.next;
         }
         return dummyRoot.next;
+    }
+
+    public static ListNode generateLinkedList(Integer[] arr) {
+        int[] arr0 = new int[arr.length];
+        for (int i = 0; i < arr.length; i++) {
+            arr0[i] = arr[i];
+        }
+        return generateLinkedList(arr0);
     }
 
     public static ListNode generateLinkedList(List<Integer> arr) {
@@ -32,6 +42,11 @@ public class LinkedListUtil {
             ptr = ptr.next;
         }
         System.out.println("None");
+    }
+
+    public static void showList(ListNode head, String info) {
+        System.out.println(info);
+        showList(head);
     }
 
     public static int size(ListNode head) {
